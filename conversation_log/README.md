@@ -36,3 +36,6 @@ Files are numbered to preserve order. Future queries get a new file in the same 
 - [Q21 — Live overlay integration with MTGDraftOverlay](Q21_overlay_integration.md)
 - [Q22 — "run em": execute Q17–Q21 plans (smallest proving slice)](Q22_run_em_judgment.md)
 - [Q23 — Commit and push to github.com/t3dy/MTGSLIDER](Q23_commit_and_push.md)
+- [Q24 — Attila temperament fact (later retracted)](Q24_attila_temperament_retracted.md)
+- [Q25 — Ignore Q24](Q25_ignore_attila.md)
+- [Q26 — Browseable static website for docs / code / slideshows](Q26_browseable_website.md)

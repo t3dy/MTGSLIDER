@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>DECKARD_BOUNDARY_PLAN · MTGSLIDER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header>
+  <h1><a href="index.html" style="color:inherit;text-decoration:none">MTGSLIDER</a></h1>
+  <nav><a href="index.html">Home</a> <a href="docs.html">Documentation</a> <a href="historical_trips.html">Historical trips</a> <a href="decks.html">Slideshows</a> <a href="decklists.html">Decklists</a> <a href="conversation.html">Conversation log</a> <a href="code.html">Code</a></nav>
+</header>
+<main><h1>DECKARD_BOUNDARY_PLAN.md</h1>
+<p>A boundary map for the proposed MTGSLIDER extension that triangulates magical/alchemical scholarship against MTG card vocabulary. Deckard distinguishes deterministic tasks from probabilistic ones. The plan names where AI work and Python-+-cited-source work meet, what artifacts get created at each boundary, and — most importantly — what NOT to use AI for.</p>
+<p>This document does not prescribe implementation steps. Slice planning happens via <code>/plan-runciter-slice</code>. This is the architecture layer that any slice must respect.</p>
+<hr>
+<h2>DETERMINISTIC TASKS (use Python + cited sources, not LLM)</h2>
+<h3>D1. Card data ingestion (Scryfall)</h3>
+<p><strong>Why deterministic:</strong> Scryfall is a structured API. Card names, oracle text, type lines, mana costs, legalities, image URIs, set codes, collector numbers, prices, artist credits — all are typed fields with documented schemas. There is nothing for an LLM to interpret here.</p>
+<p><strong>Artifact:</strong> <code>cards</code> table (already exists in <code>MTGSLIDER/src/mtgslider/schema.sql</code>); <code>cache/scryfall/*.json</code> for full payload preservation.</p>
+<p><strong>Existing implementation:</strong> <code>src/mtgslider/scryfall.py</code> (rate-limited, cached).</p>
+<h3>D2. Card image download</h3>
+<p><strong>Why deterministic:</strong> HTTP GET of a known URL to a local path. Provenance fields (URL, timestamp, face, variant) are mechanical metadata.</p>
+<p><strong>Artifact:</strong> <code>theme_card_images</code> table; physical files under <code>themes/&lt;slug&gt;/images/</code>.</p>
+<h3>D3. Decklist parsing</h3>
+<p><strong>Why deterministic:</strong> Decklist text formats (MTGTop8 copy-paste, plain text &quot;4 Counterspell&quot; / sideboard separator, MTGO <code>.dek</code> XML, Arena export) are regular grammars. Card-name fuzzy lookup against Scryfall handles spelling drift; the structural parsing itself is regex/state-machine work.</p>
+<p><strong>Artifact:</strong> new <code>decklists</code>, <code>decklist_cards</code>, <code>tournament_results</code> tables. <strong>DO NOT</strong> ask an LLM to parse a decklist — every word is a card name lookup, and an LLM hallucinating &quot;Lightning Bolt&quot; when the user typed &quot;Lightening Strike&quot; is the precise failure mode this boundary exists to prevent.</p>
+<h3>D4. Format legality at a point in time</h3>
+<p><strong>Why deterministic:</strong> Legality is a function of (card printing date, format release date, banned-list timeline). Each is a dated record in a structured source. Scryfall gives current legality; historical legality requires a local B&amp;R timeline (parked in <code>PARKING_LOT.md</code> Appendix B).</p>
+<p><strong>Artifact:</strong> <code>format_legality_events</code> table; <code>legality_at(card, format, date)</code> query function.</p>
+<h3>D5. Tournament-result and decklist provenance</h3>
+<p><strong>Why deterministic:</strong> Event name, date, format, placement, decklist-author, source URL — all are typed fields scrapable from the source pages with deterministic parsers. Provenance (URL + retrieval timestamp + parser version) is metadata.</p>
+<p><strong>Artifact:</strong> <code>tournament_results</code> table with <code>source_url</code>, <code>retrieved_at</code>, <code>parser_version</code> columns.</p>
+<h3>D6. Set membership (&quot;which cards are in this archetype&#x27;s defining deck&quot;)</h3>
+<p><strong>Why deterministic:</strong> Once a decklist is parsed (D3), &quot;Hogaak Bridgevine 2019 Modern&quot; is a fixed list of 75 cards. Membership queries are SQL joins. The LLM cannot improve on this.</p>
+<p><strong>Artifact:</strong> SQL queries against <code>decklist_cards</code>. Example: <code>SELECT cards.* FROM decklist_cards JOIN themes ON … WHERE decklist_id = &#x27;hogaak-bridgevine-mc-barcelona-2019&#x27;</code>.</p>
+<h3>D7. Vocabulary surface extraction from MTG cards</h3>
+<p><strong>Why deterministic:</strong> Building the <em>initial</em> vocabulary surface — the set of words and phrases that appear on card names, type lines, and oracle text — is a tokeniser + frequency counter, not an LLM task. Lemmatisation can use spaCy or NLTK locally; no model API call needed.</p>
+<p><strong>Artifact:</strong> <code>mtg_vocabulary</code> table with <code>(token, lemma, frequency, sample_card_ids)</code>.</p>
+<h3>D8. Federated entity reads</h3>
+<p><strong>Why deterministic:</strong> Reading the <code>entities</code> table from each scholarly database (<code>Claudiens/</code>, <code>EmeraldTablet/</code>, etc., per <code>CONTEXT_ENGINEERING.md</code>) is SQL. SQLite FTS5 search over the <code>summary</code> column is SQL. No LLM call belongs here.</p>
+<p><strong>Artifact:</strong> <code>federated_reader.py</code> (~150 lines, parked).</p>
+<h3>D9. Provenance and source-attribution metadata</h3>
+<p><strong>Why deterministic:</strong> Every claim in the system carries <code>(source_db, source_id_or_url, retrieved_at, confidence, review_status)</code>. These are typed columns on the relevant rows. Generating these is mechanical.</p>
+<p><strong>Artifact:</strong> Provenance columns added to every claim-bearing table. Validation: row-insert triggers reject claims with NULL provenance.</p>
+<h3>D10. Memory / documentation file maintenance</h3>
+<p><strong>Why deterministic:</strong> Updating <code>MEMORY.md</code>, <code>PARKING_LOT.md</code>, <code>conversation_log/Q##_<em>.md</code>, <code>briefing.md</code> files — the file writes themselves are deterministic. The </em>content* may have probabilistic origin (see P2, P5), but the convention enforcement (file paths, frontmatter shape, naming <code>Q17</code>, <code>Q18</code>, …) is mechanical and should be a script or hook, not an LLM judgement call each time.</p>
+<p><strong>Artifact:</strong> A small <code>tools/log_query.py</code> could be built that takes a query, an interpretation, and a list of artifacts, and writes the next-numbered Q##_*.md file. (Parked — currently done by Claude as a manual convention.)</p>
+<hr>
+<h2>PROBABILISTIC TASKS (LLM appropriate)</h2>
+<h3>P1. Concept-to-vocabulary mapping (the triangulation core)</h3>
+<p><strong>Why probabilistic:</strong> &quot;Does the alchemical concept <em>coniunctio</em> (union of opposites) map to MTG cards involving fusion, transformation, two-card combos, or pairings?&quot; — this is fuzzy semantic mapping. There is no SQL query that produces it. An LLM with both vocabularies in context can propose candidate mappings.</p>
+<p><strong>Validation:</strong> every proposed mapping enters a <code>concept_card_mappings</code> table with <code>confidence=&#x27;medium&#x27;</code> and <code>review_status=&#x27;unreviewed&#x27;</code>. The user reviews and either promotes to <code>confidence=&#x27;high&#x27;</code>/<code>review_status=&#x27;reviewed&#x27;</code> or rejects. <strong>Unreviewed mappings never appear in published artifacts</strong> — they only feed the review UI.</p>
+<h3>P2. Scholarly bridging prose (speaker notes, slide thesis text, essay paragraphs)</h3>
+<p><strong>Why probabilistic:</strong> Writing prose that connects &quot;Goblin sacrifice mechanics&quot; to &quot;the <em>pharmakos</em> in Walter Burkert&#x27;s <em>Homo Necans</em>&quot; is creative writing within a scholarly register. The user has already demonstrated they want this kind of writing (<code>writing/10_representative_themes.md</code>).</p>
+<p><strong>Validation:</strong> all prose carries <code>source_method=&#x27;LLM_ASSISTED&#x27;</code>, <code>review_status=&#x27;DRAFT&#x27;</code>. Citations within the prose must reference real entries in the federated entities layer (D8) — if a citation has no matching entity, the prose is rejected. <strong>Prose with unresolved citations never gets written to a published artifact.</strong></p>
+<h3>P3. Etymology cards (the <code>mtg-historical-trip</code> skill&#x27;s main output)</h3>
+<p><strong>Why probabilistic:</strong> Period definitions, semantic-shift narratives, attribution to source traditions — these draw on training-data knowledge that is <em>probably</em> correct but not guaranteed. The OED is paywalled and not directly queryable.</p>
+<p><strong>Validation:</strong> every claim in an etymology card carries an explicit <code>confidence</code> (high/medium/low) and a citation. Hedging language (&quot;appears&quot;, &quot;likely&quot;) is required for medium-confidence claims. The skill template enforces this. The user can verify against the actual OED if subscription access is available; the skill&#x27;s output is <em>useful but not authoritative</em> and is marked as such.</p>
+<h3>P4. Theme membership proposals (which cards belong to a theme)</h3>
+<p><strong>Why probabilistic:</strong> &quot;Is <em>Whispering Madness</em> a &#x27;Books in Magic&#x27; card?&quot; — the name, art, and flavor text taken together are a judgement call. Scryfall queries narrow the candidate set deterministically (D7); the LLM proposes which candidates are <em>exemplars</em>, <em>includes</em>, <em>uncertain</em>, or <em>excludes</em>.</p>
+<p><strong>Validation:</strong> the existing MTGSLIDER <code>theme_card_links.review_status</code> field is exactly this validation layer. Auto-curated links land as <code>unreviewed</code> and <code>confidence=0.5</code>. The user&#x27;s <code>mark</code> command (or a future review UI) is the promotion mechanism. <strong>No card gets <code>confidence&gt;=0.8</code> or <code>review_status=&#x27;reviewed&#x27;</code> without a human action.</strong></p>
+<h3>P5. Forum-content summarisation</h3>
+<p><strong>Why probabilistic:</strong> A 200-comment Reddit thread on <em>Hogaak</em> contains opinions, tournament reports, anecdotes, and noise. Summarising &quot;what the community thought about this card during its dominance&quot; is exactly the kind of NL synthesis where LLMs are useful and parsers are not.</p>
+<p><strong>Validation:</strong> the summary carries <code>source_url</code>, <code>retrieved_at</code>, <code>model_used</code>, <code>summary_method=&#x27;LLM&#x27;</code>. Quoted claims within the summary must include the comment author handle and timestamp where extractable; otherwise they are paraphrases marked as such. <strong>No forum claim is asserted as fact</strong> — claims are framed as &quot;according to [forum thread X], some users argued Y&quot;.</p>
+<h3>P6. Cross-database concept linking</h3>
+<p><strong>Why probabilistic:</strong> Recognising that Claudiens&#x27; &quot;<em>solutio</em>&quot; and EmeraldTablet&#x27;s &quot;<em>dissolutio</em>&quot; and a hypothetical alchemy_scryfall entry on &quot;dissolution&quot; are the same concept under variant names is fuzzy matching across small specialised vocabularies. SQL <code>LIKE</code> would miss it; embeddings would over-match. An LLM with both records in context can answer well.</p>
+<p><strong>Validation:</strong> proposed cross-links go to a <code>concept_aliases</code> table with <code>proposed_by=&#x27;LLM&#x27;</code>, <code>review_status=&#x27;unreviewed&#x27;</code>. The user confirms or rejects. <strong>The user&#x27;s terminology in each source database is preserved</strong> — aliases never overwrite canonical names.</p>
+<hr>
+<h2>VALIDATION LAYERS (where LLM output enters deterministic systems)</h2>
+<h3>V1. The &quot;draft → reviewed&quot; wall</h3>
+<p>Every LLM-generated artifact lands as <code>review_status=&#x27;unreviewed&#x27;</code> or <code>review_status=&#x27;DRAFT&#x27;</code>. Every published artifact (slide deck, essay, static site page) reads ONLY from rows where <code>review_status=&#x27;reviewed&#x27;</code>. This is a SQL <code>WHERE</code> clause in every query that produces a published artifact, enforced by code review of the build scripts.</p>
+<p><strong>Implementation hint:</strong> make the publishing scripts refuse to render slides whose card links or notes are in unreviewed state, with an explicit override flag for &quot;preview&quot; runs.</p>
+<h3>V2. The &quot;citation must resolve&quot; wall</h3>
+<p>LLM-written prose (P2, P5) with citations is parsed for citation tokens (e.g. <code>[entity:claudiens:source-authority:turba]</code>). Each token is looked up in the federated entities layer (D8). Unresolved citations cause the prose to fail validation and land in a <code>drafts/</code> directory rather than the canonical output location.</p>
+<p><strong>Implementation hint:</strong> the <code>mtg-historical-trip</code> skill&#x27;s <code>Wire-in commands</code> section already follows this pattern.</p>
+<h3>V3. The &quot;no claim without provenance&quot; wall</h3>
+<p>Database triggers (or Python validators on insert) reject any row in a claim-bearing table where <code>source_db</code>, <code>source_id_or_url</code>, or <code>retrieved_at</code> is NULL. This catches the &quot;LLM made up a fact and wrote it directly to the DB&quot; failure mode.</p>
+<p><strong>Implementation hint:</strong> SQLite triggers are sufficient; no need for an ORM.</p>
+<h3>V4. The &quot;scrape vs cite&quot; wall</h3>
+<p>Forum content has two modes: (a) <strong>scrape</strong>, where the parser extracts structured fields (post_id, author, timestamp, body) and LLM summarisation operates on the scraped body — full provenance preserved; (b) <strong>cite</strong>, where the system stores only the URL and human-readable title, no body extracted. Mode (b) is the default for ToS-restricted sources. The summary in mode (b) is <em>the user&#x27;s note</em> about why the link matters, not an LLM summary of unread content.</p>
+<p><strong>Implementation hint:</strong> a <code>forum_sources</code> table with a <code>mode</code> column (&#x27;scrape&#x27; or &#x27;cite&#x27;) and a NOT NULL constraint forbidding LLM-summary content when mode=&#x27;cite&#x27;.</p>
+<h3>V5. The &quot;human is the curator&quot; wall</h3>
+<p>Theme membership (P4) and concept-to-vocabulary mapping (P1) are <em>proposed</em> by the LLM but <em>promoted</em> by a human action. The promotion event is itself logged with timestamp + actor, so the provenance of the curated state is auditable.</p>
+<p><strong>Implementation hint:</strong> add a <code>curation_events</code> table that logs every <code>mark</code> / <code>approve</code> / <code>reject</code> action.</p>
+<hr>
+<h2>BOUNDARY VIOLATIONS TO AVOID</h2>
+<h3>W1. WASTE — Asking an LLM to parse a decklist</h3>
+<p>Don&#x27;t. A decklist is a structured document with a regular grammar. An LLM parsing &quot;4 Counterspell\n3 Snapcaster Mage&quot; is paying for token-by-token inference of something a 20-line Python parser does perfectly. Worse, the LLM may hallucinate cards. <strong>Decklist parsing is D3 — deterministic, full stop.</strong></p>
+<h3>W2. WASTE — Asking an LLM to look up a card</h3>
+<p>Don&#x27;t. Scryfall&#x27;s API exists. The user has already paid for a Scryfall service module. An LLM that &quot;remembers&quot; <em>Lightning Bolt costs {R}</em> is slower, more expensive, and less correct than <code>scryfall.named(&quot;Lightning Bolt&quot;)</code>. <strong>Card lookup is D1.</strong></p>
+<h3>W3. WASTE — Asking an LLM to compute &quot;which cards are in this deck&quot;</h3>
+<p>Don&#x27;t. Once D3 has populated <code>decklist_cards</code>, the answer is a SQL query. Asking the LLM is asking it to recall facts that the database already holds correctly.</p>
+<h3>W4. RISK — Asking deterministic code to decide whether a card &quot;fits a theme&quot;</h3>
+<p>Don&#x27;t write a hardcoded scoring function that says &quot;if oracle text contains &#x27;graveyard&#x27; then theme=&#x27;necromancy&#x27;&quot;. That is the pre-Deckard era of MTG search engines and they were terrible. Theme membership is P4 — the LLM proposes, the human curates, the deterministic layer stores and queries the result.</p>
+<h3>W5. RISK — Hardcoding which forums are &quot;safe&quot;</h3>
+<p>The list of safe sources changes (sites change ToS, forums die, new ones emerge). A hardcoded enum is brittle. Instead, maintain a <code>forum_sources</code> table where each row carries <code>tos_review_date</code>, <code>mode</code> (scrape/cite), <code>last_verified_at</code>, and a free-text <code>notes</code> column. Adding or removing a source is a row-edit, not a code change. The <em>judgement</em> about whether to scrape or cite is human; the <em>enforcement</em> is deterministic.</p>
+<h3>W6. DANGER — LLM output flowing directly into a published artifact without review</h3>
+<p>Don&#x27;t ever build a pipeline where Claude writes a paragraph and the same script publishes it to the website / .pptx / shared document. The V1 &quot;draft → reviewed&quot; wall must always sit between LLM output and any published artifact. Slide decks built from <code>unreviewed</code> data are explicitly <em>preview only</em> — watermark them, and refuse to write them to the canonical output directory.</p>
+<h3>W7. DANGER — Cross-database concept aliasing without review</h3>
+<p>Don&#x27;t auto-merge concepts across Claudiens / EmeraldTablet / etc. The user&#x27;s databases preserve genuinely different scholarly terminology, and silently unifying them strips the provenance that makes those databases valuable. Cross-links must be proposed (P6) and confirmed (V5).</p>
+<h3>W8. WASTE — Re-asking an LLM the same question across sessions</h3>
+<p>Don&#x27;t. Cache LLM outputs the same way <code>scryfall.py</code> caches API responses. The <code>mtg-historical-trip</code> skill should write its research cards to disk; subsequent invocations on the same source should read the cached card unless the user passes <code>--refresh</code>. This is the same <code>cache/scryfall/</code> pattern, applied to LLM work.</p>
+<hr>
+<h2>ARTIFACTS PRODUCED AT EACH BOUNDARY</h2>
+<p>This is the artifact map — what gets created where, by whom, with what provenance.</p>
+<table><thead><tr>
+<th>Boundary</th>
+<th>Artifact</th>
+<th>Producer</th>
+<th>Provenance fields</th>
+<th>Promotion path</th>
+</tr></thead><tbody>
+<tr>
+<td>D1</td>
+<td><code>cards</code> row, <code>cache/scryfall/*.json</code></td>
+<td>Python (Scryfall API)</td>
+<td><code>fetched_at</code></td>
+<td>direct (canonical from start)</td>
+</tr>
+<tr>
+<td>D3</td>
+<td><code>decklists</code>, <code>decklist_cards</code> rows</td>
+<td>Python (parser)</td>
+<td><code>source_url</code>, <code>retrieved_at</code>, <code>parser_version</code></td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D4</td>
+<td><code>format_legality_events</code> row</td>
+<td>Python (manual import or scraper)</td>
+<td><code>announcement_url</code>, <code>effective_date</code></td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D7</td>
+<td><code>mtg_vocabulary</code> row</td>
+<td>Python (tokeniser)</td>
+<td><code>corpus_snapshot_date</code></td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D8</td>
+<td><code>entities</code> row in each project DB</td>
+<td>per-project <code>seed_entities.py</code></td>
+<td><code>source_db</code>, <code>source_id</code></td>
+<td>direct (canonical to its DB)</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>provenance columns on every claim row</td>
+<td>trigger / validator</td>
+<td>(the columns themselves)</td>
+<td>n/a — gate, not artifact</td>
+</tr>
+<tr>
+<td>P1</td>
+<td><code>concept_card_mappings</code> row</td>
+<td>LLM proposal</td>
+<td><code>proposed_by=&#x27;LLM&#x27;</code>, <code>model_used</code>, <code>proposed_at</code>, <code>confidence=&#x27;medium&#x27;</code></td>
+<td>human <code>mark reviewed</code> action</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>speaker note / slide prose / essay paragraph</td>
+<td>LLM</td>
+<td><code>source_method=&#x27;LLM_ASSISTED&#x27;</code>, <code>review_status=&#x27;DRAFT&#x27;</code>, <code>citations[]</code></td>
+<td>human review writes <code>review_status=&#x27;reviewed&#x27;</code></td>
+</tr>
+<tr>
+<td>P3</td>
+<td>etymology / biography / tradition card under <code>writing/historical_trips/</code></td>
+<td><code>mtg-historical-trip</code> skill</td>
+<td>per-template <code>confidence</code> field</td>
+<td>human edit promotes from <code>drafts/</code> to canonical location</td>
+</tr>
+<tr>
+<td>P4</td>
+<td><code>theme_card_links</code> row with <code>confidence=0.5</code>, <code>review_status=&#x27;unreviewed&#x27;</code></td>
+<td>LLM-suggested or <code>find-cards</code> query</td>
+<td>as above</td>
+<td><code>mtgslider theme mark</code> command</td>
+</tr>
+<tr>
+<td>P5</td>
+<td><code>forum_summaries</code> row</td>
+<td>LLM operating on scraped body</td>
+<td><code>source_url</code>, <code>retrieved_at</code>, <code>model_used</code>, <code>summary_method=&#x27;LLM&#x27;</code>, <code>quoted_authors[]</code></td>
+<td>human review</td>
+</tr>
+<tr>
+<td>P6</td>
+<td><code>concept_aliases</code> row</td>
+<td>LLM proposal across federated entities</td>
+<td><code>proposed_by=&#x27;LLM&#x27;</code>, <code>confidence=&#x27;medium&#x27;</code></td>
+<td>human <code>mark reviewed</code></td>
+</tr>
+<tr>
+<td>V1–V5</td>
+<td>(no artifacts — these are gates)</td>
+<td>enforcement code</td>
+<td>n/a</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>memory</td>
+<td><code>MEMORY.md</code>, <code>feedback_<em>.md</code>, <code>project_</em>.md</code>, <code>conversation_log/Q##_*.md</code></td>
+<td>Claude (with human authorship via instruction)</td>
+<td>implicit (the file is the artifact)</td>
+<td>review on memory consolidation passes</td>
+</tr>
+<tr>
+<td>docs</td>
+<td><code>briefing.md</code> per database, workspace <code>INDEX.md</code></td>
+<td>hand-written, refreshed by script</td>
+<td>implicit</td>
+<td>human edit</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>MEMORY AND DOCUMENTATION COMPOSITION (asked in scope #6)</h2>
+<p>The layers compose like this, from deepest to most session-local:</p>
+<ol>
+<li><strong>Workspace <code>CLAUDE.md</code></strong> — invariant project profile and planning protocol. Read first, read always. Never auto-edited.</li>
+<li><strong>Per-project <code>CLAUDE.md</code></strong> (e.g. <code>Claudiens/CLAUDE.md</code>, <code>MTGSLIDER/README.md</code>) — project-specific architecture, schema, and operating rules. Hand-edited; refreshed when architecture changes.</li>
+<li><strong>Per-project <code>briefing.md</code></strong> (proposed in <code>CONTEXT_ENGINEERING.md</code>) — ~500-word pitch of what&#x27;s in this project&#x27;s data layer, written for an LLM about to query it cold. Hand-edited.</li>
+<li><strong>Per-project ontology / schema docs</strong> (<code>Claudiens/docs/ONTOLOGY.md</code>, <code>MTGSLIDER/src/mtgslider/schema.sql</code>) — structural reference. Auto-refreshed by <code>seed_entities.py</code> or equivalent.</li>
+<li><strong>Project memory</strong> (<code>~/.claude/projects/C--Dev/memory/project_*.md</code>) — what&#x27;s happening on this project right now, what was decided, what was deferred. Updated when state changes meaningfully.</li>
+<li><strong>Project <code>PARKING_LOT.md</code></strong> — the deferred-work log. Append-only. Items move to <code>ROADMAP.md</code> when scoped, never silently consumed.</li>
+<li>**Project <code>conversation_log/Q##_*.md</code>** — per-query session audit. The freshest layer. Read for &quot;what just happened in this session&quot;.</li>
+<li><strong>Federated entities layer</strong> (proposed) — programmatic cross-project surface for LLM tool calls. Doesn&#x27;t replace the docs above; sits beneath them.</li>
+</ol>
+<p>The right load order for an LLM picking up an MTGSLIDER task cold:</p>
+<ol>
+<li>Workspace <code>CLAUDE.md</code></li>
+<li><code>MTGSLIDER/README.md</code> + <code>MTGSLIDER/REFRAME_NOTES.md</code> + <code>MTGSLIDER/ROADMAP.md</code></li>
+<li><code>MTGSLIDER/PARKING_LOT.md</code> (skim — what&#x27;s already deferred)</li>
+<li><code>~/.claude/projects/C--Dev/memory/project_mtgslider.md</code> (what&#x27;s the current state)</li>
+<li>Last 1–3 entries of <code>MTGSLIDER/conversation_log/</code> (what happened most recently)</li>
+<li>Specific schema/code files only as needed</li>
+</ol>
+<p>For humans: same order, but also helpful is <code>writing/10_representative_themes.md</code> to see what the system is <em>for</em> in concrete terms.</p>
+<hr>
+<h2>SUMMARY — THE BOUNDARY IN ONE SENTENCE</h2>
+<p><strong>Deterministic Python owns:</strong> card data, decklist contents, format legality, vocabulary surfaces, provenance metadata, file/database I/O, and the federated entities reader.</p>
+<p><strong>LLMs own:</strong> semantic mapping between scholarly concepts and MTG vocabulary, scholarly bridging prose, etymology / biography / tradition research cards, theme-membership proposals, forum-content summarisation, and cross-database concept aliasing — all with explicit <code>confidence</code>, <code>review_status</code>, and citation requirements, and none of it published until a human promotes it.</p>
+<p><strong>The wall between them is a SQL <code>WHERE review_status = &#x27;reviewed&#x27;</code>.</strong> Everything else is plumbing.</p>
+<p><strong>The single most important rule:</strong> no LLM-generated content reaches a published artifact (slide deck, website page, essay, .pptx output) without passing through the draft → reviewed promotion. This is the wall that makes the system trustworthy as scholarship.</p></main>
+<footer>Generated by tools/build_site.py · github.com/t3dy/MTGSLIDER</footer>
+</body></html>

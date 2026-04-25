@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>DECKARD_BOUNDARY_PLAN_chatgpt_ingest · MTGSLIDER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header>
+  <h1><a href="index.html" style="color:inherit;text-decoration:none">MTGSLIDER</a></h1>
+  <nav><a href="index.html">Home</a> <a href="docs.html">Documentation</a> <a href="historical_trips.html">Historical trips</a> <a href="decks.html">Slideshows</a> <a href="decklists.html">Decklists</a> <a href="conversation.html">Conversation log</a> <a href="code.html">Code</a></nav>
+</header>
+<main><h1>DECKARD_BOUNDARY_PLAN_chatgpt_ingest.md</h1>
+<p>A boundary map for ingesting the user&#x27;s ChatGPT chat archive into a queryable database that surfaces MTG-related prompts, outputs, designs, and &quot;desires&quot; — and feeds those into MTGSLIDER&#x27;s database, the workspace memory layer, or system documentation.</p>
+<p>Companion to <a href="DECKARD_BOUNDARY_PLAN.md">DECKARD_BOUNDARY_PLAN.md</a> (the scholarship-triangulation plan). Same Deckard discipline: name where deterministic Python ends and where LLM judgement begins, name the gates between them, name what NOT to use AI for.</p>
+<p>This plan does not prescribe implementation. Slice planning happens via <code>/plan-runciter-slice</code>.</p>
+<hr>
+<h2>The shape of the input</h2>
+<p>OpenAI&#x27;s user data export produces a <code>.zip</code> containing:</p>
+<ul>
+<li><code>conversations.json</code> — the full chat history as a structured tree (message roles, timestamps, message content, parent IDs)</li>
+<li><code>message_feedback.json</code> — thumbs-up/down history</li>
+<li><code>model_comparisons.json</code> — A/B comparisons (only for users in eval programs)</li>
+<li>a few smaller files (user profile, shared links)</li>
+</ul>
+<p>The user&#x27;s chat archive may or may not currently exist locally. Step zero is locating it. If absent, the user can request a fresh export from chat.openai.com (Settings → Data Controls → Export Data).</p>
+<hr>
+<h2>DETERMINISTIC TASKS</h2>
+<h3>D1. Archive intake</h3>
+<p><strong>Why deterministic:</strong> Unzipping a file and reading JSON is mechanical.</p>
+<p><strong>Artifact:</strong> <code>cache/chatgpt_archive/&lt;export_date&gt;/conversations.json</code> (raw, never edited). Provenance: <code>imported_at</code>, <code>archive_export_date</code>, <code>source_filename</code>.</p>
+<h3>D2. Conversation tree → flat message rows</h3>
+<p><strong>Why deterministic:</strong> <code>conversations.json</code> is a tree of messages with parent_ids. Flattening to per-conversation linear threads, then to a <code>messages</code> table, is graph traversal — pure code.</p>
+<p><strong>Artifact:</strong> <code>chat_conversations</code> and <code>chat_messages</code> tables with <code>(conversation_id, message_id, parent_id, role, model, created_at, content_text, content_format)</code>.</p>
+<h3>D3. Token-level metadata</h3>
+<p><strong>Why deterministic:</strong> Word count, character count, language detection (via <code>langdetect</code> or <code>cld3</code>), URL extraction (regex), code-block extraction (markdown fence regex) — all algorithmic.</p>
+<p><strong>Artifact:</strong> columns on <code>chat_messages</code>: <code>word_count</code>, <code>lang</code>, <code>has_code</code>, <code>urls[]</code>.</p>
+<h3>D4. Topic-keyword filter for MTG relevance</h3>
+<p><strong>Why deterministic:</strong> A conservative first pass uses a hand-curated keyword list (&quot;Magic the Gathering&quot;, &quot;MTG&quot;, &quot;Scryfall&quot;, &quot;Commander&quot;, &quot;Modern&quot;, &quot;Standard&quot;, &quot;Pioneer&quot;, card-name patterns like <code>\b[A-Z][a-z]+ Bolt\b</code>, format-keyword tokens). This is grep, not AI.</p>
+<p><strong>Artifact:</strong> <code>chat_messages.mtg_relevance_score</code> (0.0–1.0, deterministic from keyword density + regex hits) and <code>chat_messages.mtg_relevance_method=&#x27;keyword&#x27;</code>.</p>
+<h3>D5. Conversation-level provenance</h3>
+<p><strong>Why deterministic:</strong> Title, first message timestamp, last message timestamp, model used, total tokens, message count — all are aggregations.</p>
+<p><strong>Artifact:</strong> <code>chat_conversations</code> columns: <code>title</code>, <code>started_at</code>, <code>last_active_at</code>, <code>model_used</code>, <code>message_count</code>, <code>mtg_relevance_score</code> (max of message scores).</p>
+<h3>D6. Cross-references to MTGSLIDER cards</h3>
+<p><strong>Why deterministic:</strong> If a chat message contains card names, fuzzy-match each to Scryfall (the existing <code>scryfall.named(..., fuzzy=True)</code> works for this) and store the (chat_message_id, scryfall_id) edge. The fuzzy match itself uses Scryfall&#x27;s logic, not an LLM.</p>
+<p><strong>Artifact:</strong> <code>chat_message_card_refs</code> table with <code>(chat_message_id, scryfall_id, match_confidence, matched_text)</code>.</p>
+<h3>D7. Federated entity exposure</h3>
+<p><strong>Why deterministic:</strong> Per <code>CONTEXT_ENGINEERING.md</code>, this database (call it <code>chatgpt_archive.db</code>) gets its own <code>entities</code> table that the federated reader can query alongside Claudiens, EmeraldTablet, MTGSLIDER, etc.</p>
+<p><strong>Artifact:</strong> <code>entities</code> rows with <code>entity_type=&#x27;chat_conversation&#x27;</code> or <code>&#x27;chat_design_idea&#x27;</code>, summary fields filled by D8/P3 below.</p>
+<hr>
+<h2>PROBABILISTIC TASKS</h2>
+<h3>P1. Topic classification at the conversation level</h3>
+<p><strong>Why probabilistic:</strong> &quot;What was this 200-message conversation actually about?&quot; is a summarisation + classification task that keyword filters get only partly right. The LLM can read the full thread and produce a structured <code>(primary_topic, secondary_topics[], summary, design_artifacts_mentioned[])</code>.</p>
+<p><strong>Validation:</strong> lands in <code>chat_conversations.llm_topic_classification</code> with <code>model_used</code>, <code>classified_at</code>, <code>review_status=&#x27;unreviewed&#x27;</code>. The user spot-reviews high-relevance conversations; low-relevance (D4 score &lt; 0.2) may stay unreviewed indefinitely without harm.</p>
+<h3>P2. Design-idea extraction</h3>
+<p><strong>Why probabilistic:</strong> &quot;What concrete designs, prompts, schemas, or product ideas did the user propose in this conversation?&quot; is exactly the kind of structured extraction LLMs do well and parsers do badly. The output is a list of typed objects: <code>(idea_type, summary, exemplar_quote, position_in_conversation)</code>.</p>
+<p><strong>Validation:</strong> <code>chat_design_ideas</code> table with full provenance (<code>source_message_id</code>, <code>extracted_by_model</code>, <code>extracted_at</code>, <code>confidence</code>, <code>review_status=&#x27;unreviewed&#x27;</code>). <strong>Promoted ideas can flow into MTGSLIDER&#x27;s <code>PARKING_LOT.md</code> or <code>ROADMAP.md</code> only after human review.</strong></p>
+<h3>P3. &quot;Desires&quot; extraction</h3>
+<p><strong>Why probabilistic:</strong> &quot;Desires&quot; — the user&#x27;s term for things they wished a system could do, asked an LLM to help with, or described as the future of a project — are hard to define and hard to extract with regex. An LLM with the conversation + a clear instruction (&quot;identify statements of the form &#x27;I wish&#x27;, &#x27;it would be nice if&#x27;, &#x27;we could&#x27;, &#x27;eventually I want&#x27;, and similar&quot;) produces a useful first pass.</p>
+<p><strong>Validation:</strong> <code>chat_desires</code> table with <code>source_message_id</code>, <code>desire_text</code>, <code>extracted_at</code>, <code>model_used</code>, <code>review_status=&#x27;unreviewed&#x27;</code>. <strong>Desires are never promoted directly to ROADMAP.md</strong> — they enter PARKING_LOT.md as candidate ideas first, where they go through normal scoping discipline.</p>
+<h3>P4. Cross-conversation theme linking</h3>
+<p><strong>Why probabilistic:</strong> &quot;These three conversations from different months are all about the same MTG slideshow project&quot; is fuzzy linking the LLM does better than <code>LIKE</code> queries.</p>
+<p><strong>Validation:</strong> <code>chat_conversation_themes</code> with <code>(theme_id, conversation_id, confidence, proposed_by=&#x27;LLM&#x27;, review_status=&#x27;unreviewed&#x27;)</code>.</p>
+<h3>P5. Linking design ideas to existing MTGSLIDER state</h3>
+<p><strong>Why probabilistic:</strong> &quot;This idea from a March 2025 chat is the same thing I parked as &#x27;topic intelligence reframe&#x27; in MTGSLIDER&#x27;s PARKING_LOT&quot; is a semantic match across two corpora. LLM-suggested, human-confirmed.</p>
+<p><strong>Validation:</strong> <code>chat_idea_mtgslider_links</code> with full provenance and a review gate.</p>
+<hr>
+<h2>VALIDATION LAYERS</h2>
+<h3>V1. The &quot;draft → reviewed&quot; wall (same as primary plan)</h3>
+<p>LLM-extracted topics, design-ideas, desires, and links land as <code>unreviewed</code>. Nothing flows into MTGSLIDER&#x27;s published artifacts without promotion.</p>
+<h3>V2. The &quot;raw conversation is sacrosanct&quot; wall</h3>
+<p>The <code>cache/chatgpt_archive/&lt;export_date&gt;/conversations.json</code> is <strong>never edited</strong>. All derived data lives in the SQLite database; if the analysis is wrong, regenerate from the raw archive. This protects against LLM-induced corruption of the user&#x27;s actual chat history.</p>
+<h3>V3. The &quot;MTG-relevance gate&quot; wall</h3>
+<p>Only conversations or messages with <code>mtg_relevance_score &gt; 0.2</code> (or another tunable threshold) get LLM topic classification (P1) or design-idea extraction (P2). Below the threshold, the LLM is not invoked. This bounds cost and prevents the LLM from wasting cycles on conversations about REAPER or Brautigan or the user&#x27;s other projects.</p>
+<h3>V4. The &quot;private-content gate&quot; wall</h3>
+<p>The user&#x27;s chat history likely contains personal material (medical, legal, family, financial). The intake script must support a <code>--exclude-keywords</code> flag and a <code>chat_excluded_messages</code> table where messages matching certain regexes (e.g. SSN patterns, medical-term lists) are FLAGGED and EXCLUDED from LLM-passed corpora. This wall is OFF by default — the user must opt in to exclusion lists, since the cost of false-flagging legitimate content is real.</p>
+<hr>
+<h2>BOUNDARY VIOLATIONS TO AVOID</h2>
+<h3>W1. WASTE — Asking an LLM to flatten the conversation tree</h3>
+<p>Don&#x27;t. <code>conversations.json</code> has a documented schema. Tree traversal is 50 lines of Python. The LLM cannot improve on this.</p>
+<h3>W2. WASTE — Asking an LLM to detect MTG relevance at the message level</h3>
+<p>Don&#x27;t, at least not as the first pass. Keyword + regex is fast, free, and good enough to filter the corpus. The LLM gets invoked on what survives the filter.</p>
+<h3>W3. RISK — Hardcoding which topics count as &quot;MTG project ideas&quot;</h3>
+<p>Don&#x27;t write a regex for &quot;design ideas&quot;. The user&#x27;s design idiolect is project-specific and evolving. P2 needs LLM judgement; the gate is the unreviewed-status, not a regex.</p>
+<h3>W4. DANGER — Auto-promoting extracted &quot;desires&quot; into ROADMAP.md</h3>
+<p>Don&#x27;t. Desires found in chat may be aspirational, contradictory, abandoned, or already shipped. They MUST land in PARKING_LOT.md (where they survive contact with the planning protocol) and from there be promoted (or not) by the user.</p>
+<h3>W5. DANGER — Sending the entire archive to an LLM in one call</h3>
+<p>Don&#x27;t. The archive may contain personal material the user does not want shared with any model. Use V3 (relevance gate) to bound what gets sent. For very high-relevance conversations the user wants summarised in full, that&#x27;s an explicit opt-in per-conversation, not a default.</p>
+<h3>W6. WASTE — Re-extracting from the same conversation across sessions</h3>
+<p>Don&#x27;t. Cache LLM extractions keyed by <code>(conversation_id, model_used, prompt_version)</code>. Re-runs only when a new model or new prompt is being tried.</p>
+<hr>
+<h2>ARTIFACTS PRODUCED</h2>
+<table><thead><tr>
+<th>Boundary</th>
+<th>Artifact</th>
+<th>Producer</th>
+<th>Promotion path</th>
+</tr></thead><tbody>
+<tr>
+<td>D1</td>
+<td><code>cache/chatgpt_archive/&lt;date&gt;/</code> raw files</td>
+<td>Python (unzip)</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D2</td>
+<td><code>chat_conversations</code>, <code>chat_messages</code> rows</td>
+<td>Python (parser)</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D3</td>
+<td>metadata columns on chat_messages</td>
+<td>Python</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D4</td>
+<td><code>mtg_relevance_score</code></td>
+<td>Python (keyword scorer)</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D6</td>
+<td><code>chat_message_card_refs</code></td>
+<td>Python (Scryfall fuzzy)</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>D7</td>
+<td><code>entities</code> row per conversation/idea</td>
+<td>seed_entities.py</td>
+<td>direct</td>
+</tr>
+<tr>
+<td>P1</td>
+<td><code>chat_conversations.llm_topic_classification</code></td>
+<td>LLM</td>
+<td>human review</td>
+</tr>
+<tr>
+<td>P2</td>
+<td><code>chat_design_ideas</code> rows</td>
+<td>LLM</td>
+<td>review → optionally promoted to MTGSLIDER <code>PARKING_LOT.md</code> entry</td>
+</tr>
+<tr>
+<td>P3</td>
+<td><code>chat_desires</code> rows</td>
+<td>LLM</td>
+<td>review → optionally promoted to MTGSLIDER <code>PARKING_LOT.md</code></td>
+</tr>
+<tr>
+<td>P4</td>
+<td><code>chat_conversation_themes</code></td>
+<td>LLM</td>
+<td>review</td>
+</tr>
+<tr>
+<td>P5</td>
+<td><code>chat_idea_mtgslider_links</code></td>
+<td>LLM</td>
+<td>review</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>INTEGRATION WITH MTGSLIDER</h2>
+<p>The chat archive does NOT live inside MTGSLIDER. It lives at its own path (suggested: <code>C:\Dev\ChatGPTArchive\</code> to keep it personal and gitignored separately). MTGSLIDER does not depend on it.</p>
+<p>What MTGSLIDER <em>can</em> do is read the chat archive&#x27;s <code>entities</code> table via the federated reader (per <code>CONTEXT_ENGINEERING.md</code>), so during an MTGSLIDER session an LLM can pull &quot;what did I say about this in chat&quot; as a context source for slide writing or theme curation.</p>
+<p><strong>The integration is read-only and federated, not embedded.</strong> If the chat archive is deleted, MTGSLIDER continues to work.</p>
+<hr>
+<h2>SUMMARY — THE BOUNDARY IN ONE SENTENCE</h2>
+<p><strong>Deterministic Python owns:</strong> archive unpacking, conversation-tree flattening, metadata extraction, MTG-relevance keyword scoring, card-name fuzzy matching, federated entity exposure.</p>
+<p><strong>LLMs own:</strong> topic classification, design-idea extraction, desire extraction, cross-conversation theme linking, linking chat ideas to existing MTGSLIDER state — all with explicit review gates.</p>
+<p><strong>The most important rule, repeated from the primary plan:</strong> no LLM-extracted desire becomes an MTGSLIDER roadmap item without passing through PARKING_LOT.md and the planning-protocol scoping pass. Chat history is <em>suggestive</em>, not <em>prescriptive</em> — the user&#x27;s past wishes do not bind the user&#x27;s present priorities.</p></main>
+<footer>Generated by tools/build_site.py · github.com/t3dy/MTGSLIDER</footer>
+</body></html>

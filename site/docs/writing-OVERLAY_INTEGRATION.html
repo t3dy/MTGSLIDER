@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>OVERLAY_INTEGRATION · MTGSLIDER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header>
+  <h1><a href="index.html" style="color:inherit;text-decoration:none">MTGSLIDER</a></h1>
+  <nav><a href="index.html">Home</a> <a href="docs.html">Documentation</a> <a href="historical_trips.html">Historical trips</a> <a href="decks.html">Slideshows</a> <a href="decklists.html">Decklists</a> <a href="conversation.html">Conversation log</a> <a href="code.html">Code</a></nav>
+</header>
+<main><h1>OVERLAY_INTEGRATION.md</h1>
+<p>How MTGSLIDER&#x27;s database plugs into the existing <code>MTGDraftOverlay</code> project to deliver live, transparent, toggleable in-game overlays carrying historical / cultural / linguistic commentary alongside (or instead of) the existing strategic-advice content.</p>
+<h2>What already exists in MTGDraftOverlay</h2>
+<p>Per <code>C:\Dev\mtg-overlay-plan.md</code>:</p>
+<ul>
+<li><strong>Platform:</strong> Windows-only, runs on the same machine as MTG Arena</li>
+<li><strong>Card detection:</strong> Player.log scrape → grpId → oracle_id (already wired)</li>
+<li><strong>Draft-pick UI:</strong> compact badges per pack slot + side panel keyed by slot position</li>
+<li><strong>Side-panel pattern:</strong> &quot;always visible when draft is active&quot; — <em>this is the integration point we extend</em></li>
+<li><strong>Hide / show:</strong> foreground detection (auto-hide when MTGA loses focus); hotkeys for visibility</li>
+<li><strong>Multi-monitor:</strong> overlay follows MTGA window</li>
+<li><strong>Stack:</strong> Node.js, vitest</li>
+</ul>
+<p>The overlay already has the hard parts solved: knowing which card is on screen and rendering a non-intrusive panel adjacent to MTGA. <strong>What&#x27;s missing for the user&#x27;s ask is a content layer — the panel currently shows pick ratings; we add commentary content alongside or in tabs.</strong></p>
+<h2>The integration point</h2>
+<p>Two new things:</p>
+<ol>
+<li><strong>MTGSLIDER must expose a read API.</strong> Not a web service — a small local Node-readable interface. Two options, both small:</li>
+</ol>
+<p>   - <strong>Option A (preferred):</strong> A SQLite read-only handle on <code>MTGSLIDER/data/mtgslider.sqlite</code> from the Node overlay process. Node has good SQLite bindings (<code>better-sqlite3</code>). The overlay queries the same file MTGSLIDER&#x27;s Python writes; no IPC, no HTTP, no service to manage.</p>
+<p>   - <strong>Option B:</strong> A tiny Python HTTP server (<code>uvicorn</code>/<code>flask</code> on <code>localhost:7843</code>) that the overlay calls. More complex to operate; adds a process the user has to remember to start. Use only if Node-side SQLite proves problematic.</p>
+<ol>
+<li><strong>A panel content schema</strong> the overlay can render generically, regardless of which content type is being shown. Each panel &quot;card&quot; looks like:</li>
+</ol>
+<p>   ```ts</p>
+<p>   interface CommentaryPanel {</p>
+<p>     oracle_id: string</p>
+<p>     card_name: string</p>
+<p>     panel_type: &#x27;strategic&#x27; | &#x27;historical&#x27; | &#x27;linguistic&#x27; | &#x27;lore&#x27;</p>
+<p>     title: string                 // e.g. &quot;Etymology of &#x27;conjure&#x27;&quot;</p>
+<p>     summary: string               // 1–2 sentences, headline</p>
+<p>     body_markdown: string         // rich content, scrollable</p>
+<p>     citations: { label: string, url?: string }[]</p>
+<p>     confidence: &#x27;high&#x27; | &#x27;medium&#x27; | &#x27;low&#x27;</p>
+<p>     review_status: &#x27;reviewed&#x27; | &#x27;unreviewed&#x27;    // overlay HIDES unreviewed by default</p>
+<p>     mtgslider_source: string      // e.g. &quot;theme:books-in-magic&quot;, &quot;etymology:conjure&quot;</p>
+<p>   }</p>
+<p>   ```</p>
+<p>The overlay shows tabs (strategic / historical / linguistic / lore) keyed by <code>panel_type</code>. Tabs with no content for the current card simply don&#x27;t appear. Tabs with <code>review_status=&#x27;unreviewed&#x27;</code> content show a small &quot;draft&quot; badge.</p>
+<h2>Data flow at runtime</h2>
+<pre><code>MTG Arena draws a card on screen
+        ↓
+MTGDraftOverlay&#x27;s existing log scraper resolves oracle_id
+        ↓
+Overlay queries MTGSLIDER read API:
+    SELECT * FROM v_card_commentary WHERE oracle_id = ?
+        ↓
+MTGSLIDER returns 0..N CommentaryPanel rows (all four types may apply)
+        ↓
+Overlay renders tabs in its existing side-panel slot
+        ↓
+User toggles visibility / switches tabs / dismisses with hotkey</code></pre>
+<p>The view <code>v_card_commentary</code> is the contract. It joins:</p>
+<ul>
+<li><code>theme_card_links</code> → which themes does this card belong to (approved only)</li>
+<li><code>theme.packet</code> → the theme&#x27;s curated note</li>
+<li><code>historical_trips</code> (proposed table) → etymology / biography / tradition cards that reference this card</li>
+<li><code>forum_summaries</code> (proposed table, parked) → fan takes if any</li>
+<li><code>competitive_appearances</code> (proposed table from Q18 plan) → famous decks the card was in</li>
+</ul>
+<p>Each row carries <code>review_status</code> and <code>confidence</code>. The overlay defaults to showing only <code>reviewed</code>. A &quot;preview mode&quot; toggle in the tray icon lets the user see drafts.</p>
+<h2>What&#x27;s new vs reused</h2>
+<table><thead><tr>
+<th>Need</th>
+<th>Reused from existing overlay</th>
+<th>New build</th>
+</tr></thead><tbody>
+<tr>
+<td>Detecting card on screen</td>
+<td>yes — log scraper exists</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td>Rendering side panel</td>
+<td>yes — side-panel UI exists</td>
+<td>adapt to render <code>CommentaryPanel</code></td>
+</tr>
+<tr>
+<td>Toggle / hotkeys</td>
+<td>yes — already designed</td>
+<td>add hotkey for tab switching</td>
+</tr>
+<tr>
+<td>Foreground / multi-monitor</td>
+<td>yes</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td>Card → oracle_id resolution</td>
+<td>yes</td>
+<td>nothing</td>
+</tr>
+<tr>
+<td><strong>Content</strong></td>
+<td>the existing 17Lands draft ratings</td>
+<td><strong>MTGSLIDER read API + the four panel_type content layers</strong></td>
+</tr>
+</tbody></table>
+<h2>Constructed-play mode (the user&#x27;s broader ask)</h2>
+<p>The existing overlay is draft-only. Extending to constructed live play needs:</p>
+<ul>
+<li><strong>Card-on-screen detection during a constructed game.</strong> MTG Arena&#x27;s Player.log emits events for every revealed card (your hand, spells cast, opponent reveals, exiled cards, etc.). The plumbing is the same as draft; the <em>triggering events</em> are different. This is overlay-side work, not MTGSLIDER work.</li>
+<li><strong>Less aggressive panel display.</strong> Drafts have natural pause-points (between picks); constructed play does not. The overlay needs a &quot;passive mode&quot; — content available on hover or hotkey, never auto-popping. This is overlay UX.</li>
+</ul>
+<p>Both are MTGDraftOverlay-side; MTGSLIDER&#x27;s read API is identical regardless of game mode.</p>
+<h2>Boundaries (Deckard discipline)</h2>
+<p>Reusing the framework from <a href="DECKARD_BOUNDARY_PLAN.md">DECKARD_BOUNDARY_PLAN.md</a>:</p>
+<ul>
+<li><strong>Deterministic:</strong> card-on-screen detection, oracle_id lookup, SQL query against <code>v_card_commentary</code>, panel rendering. No LLM in the live path.</li>
+<li><strong>Probabilistic, but pre-computed:</strong> the <em>content</em> of the commentary panels — historical-trip cards, scholarly notes, theme assignments — is LLM-assisted at <em>authoring time</em> (per the existing Deckard plan), reviewed by the user, then stored as <code>reviewed</code> content in MTGSLIDER&#x27;s DB. <strong>At gameplay time the LLM is not invoked.</strong> This is the right boundary: live overlay must be fast and deterministic; quality comes from the offline curation.</li>
+<li><strong>Forbidden:</strong> invoking an LLM during gameplay to generate commentary on demand. Latency, cost, and reliability all argue against it. If a card has no curated content, the panel shows a &quot;no commentary yet&quot; placeholder with a button to &quot;stage this card for commentary&quot; — which queues a background <code>mtg-historical-trip</code> invocation between sessions.</li>
+</ul>
+<h2>Prerequisites</h2>
+<p>Before the integration is buildable:</p>
+<ol>
+<li>MTGSLIDER&#x27;s schema needs an <code>oracle_id</code> indexed on <code>cards</code> (already there as <code>cards.oracle_id</code> — confirmed in <code>schema.sql</code>).</li>
+<li>MTGSLIDER&#x27;s schema needs the <code>historical_trips</code> table (proposed; not yet built — would store the structured output of the <code>mtg-historical-trip</code> skill).</li>
+<li>The <code>v_card_commentary</code> view needs to be designed (small SQL, can be written when the integration starts).</li>
+<li>Decision: SQLite handle from Node (Option A) vs HTTP service (Option B). Recommend A.</li>
+<li>The overlay project needs a small content-panel mode added alongside its existing rating-panel mode.</li>
+</ol>
+<p>None of these are large. The largest is the <em>content</em> itself — having enough curated commentary to make the overlay feel populated. That&#x27;s the existing MTGSLIDER pipeline running over time, not a new build.</p>
+<h2>Out of scope (parked)</h2>
+<ul>
+<li>Real-time LLM invocation during gameplay (forbidden per Deckard)</li>
+<li>TTS / audio commentary during play (not asked for; would be a separate project)</li>
+<li>Mobile / Arena Mobile support (overlay is Windows desktop)</li>
+<li>MTGO support (different log format, different work)</li>
+<li>Multiplayer / streaming overlay (different audience, different constraints)</li>
+</ul>
+<h2>Recommended slice 1 (when the user is ready to build)</h2>
+<p>Smallest end-to-end integration:</p>
+<ol>
+<li>Add <code>historical_trips</code> table to MTGSLIDER schema</li>
+<li>Generate one historical-trip card for ~5 well-known cards (e.g. <em>Counterspell</em>, <em>Lightning Bolt</em>, <em>Wrath of God</em>, <em>Llanowar Elves</em>, <em>Sol Ring</em>) using the <code>mtg-historical-trip</code> skill</li>
+<li>Build <code>v_card_commentary</code> view returning historical content for those 5 cards</li>
+<li>Add a single new &quot;Historical&quot; tab to MTGDraftOverlay&#x27;s existing side panel, reading from the SQLite handle</li>
+<li>Demo: open a draft, get a pick that includes one of the 5 cards, see the historical tab populate</li>
+</ol>
+<p>If that loop works end-to-end on draft for 5 cards, expanding to constructed mode and to the full content corpus is engineering, not architecture.</p></main>
+<footer>Generated by tools/build_site.py · github.com/t3dy/MTGSLIDER</footer>
+</body></html>

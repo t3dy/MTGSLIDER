@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>PARKING_LOT · MTGSLIDER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<header>
+  <h1><a href="index.html" style="color:inherit;text-decoration:none">MTGSLIDER</a></h1>
+  <nav><a href="index.html">Home</a> <a href="docs.html">Documentation</a> <a href="historical_trips.html">Historical trips</a> <a href="decks.html">Slideshows</a> <a href="decklists.html">Decklists</a> <a href="conversation.html">Conversation log</a> <a href="code.html">Code</a></nav>
+</header>
+<main><h1>PARKING_LOT.md — MTG Research Project</h1>
+<blockquote>Hawthorne Abendsen wrote <em>The Grasshopper Lies Heavy</em> in safety. This is the same kind of safety. Ideas live here without disrupting current scope.</blockquote>
+<p>All ideas below were captured on <strong>2026-04-24</strong> during an initial brainstorming dump. None are in scope for the current build. The actual project scope has not yet been frozen — that requires <code>/plan-joe-chip-scope</code> and <code>/plan-runciter-slice</code> as separate, deliberate steps.</p>
+<p>The four spec dumps are preserved verbatim in the appendices at the bottom of this file. The parking entries above each appendix summarize them in skill format.</p>
+<hr>
+<h2>Parking Entries</h2>
+<h3>PARKED IDEA: MTG Research Pipeline — Foundation (Spec Dump 1)</h3>
+<p><strong>Description:</strong> Ten foundational subsystems for a Magic: The Gathering research pipeline — Scryfall API service, card image retrieval, format-history SQLite schema, web research ingestion, decklist/tournament parser, thematic discovery engine, essay generator, slideshow generator (v1), review dashboard, orchestration CLI.</p>
+<p><strong>Related project:</strong> mtg-research (this directory; project not yet scoped)</p>
+<p><strong>Complexity:</strong> project (not session, not sprint — this is a multi-month system on its own)</p>
+<p><strong>Prerequisites:</strong> scope freeze via <code>/plan-joe-chip-scope</code>; vertical slice plan via <code>/plan-runciter-slice</code>; choose one initial theme as the proving ground; decide subscription vs API for any LLM-touching components per user&#x27;s stated preference for subscriptions</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<p><strong>Verbatim spec:</strong> see Appendix A</p>
+<hr>
+<h3>PARKED IDEA: MTG Research Pipeline — Domain Knowledge Layer (Spec Dump 2)</h3>
+<p><strong>Description:</strong> Ten additional subsystems layering Magic-specific domain knowledge over the foundation — format/era taxonomy, banned/restricted tracker, archetype ontology, claim conflict detector, source credibility scoring, card-printing timeline service, legality validator, art/theme annotation, card cluster/comparison engine, static website exporter.</p>
+<p><strong>Related project:</strong> mtg-research</p>
+<p><strong>Complexity:</strong> project (every entry here is itself sprint-scale)</p>
+<p><strong>Prerequisites:</strong> foundation layer (Appendix A) must exist and have at least one working theme end-to-end; archetype ontology and format taxonomy probably need to come before conflict detector and legality validator regardless</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<p><strong>Verbatim spec:</strong> see Appendix B</p>
+<hr>
+<h3>PARKED IDEA: Topic-First Architectural Reframe + Topic Intelligence Database (Spec Dump 3)</h3>
+<p><strong>Description:</strong> Architectural pivot: topics (not cards) become the central first-class entity. Plus ten topic-intelligence subsystems — topic model, topic property extraction, topic relationship graph, topic-to-card linking, topic research packets, topic-specific evidence scoring, topic review UI, persistent topic memory across projects, topic comparison tools, topic-first workflow refactor.</p>
+<p><strong>Related project:</strong> mtg-research</p>
+<p><strong>Complexity:</strong> project — and this is also an architectural decision that should be pressure-tested with <code>/plan-mercer-reframe</code> before being adopted, because if accepted it changes the shape of everything in Appendices A and B</p>
+<p><strong>Prerequisites:</strong> <code>/plan-mercer-reframe</code> review of the topic-first hypothesis; only after reframe is accepted or rejected should any of these ten subsystems be sequenced</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<p><strong>Verbatim spec:</strong> see Appendix C</p>
+<hr>
+<h3>PARKED IDEA: Slideshow Generator → Presentation Compiler (Spec Dump 4)</h3>
+<p><strong>Description:</strong> Replaces the v1 slideshow generator (in Appendix A) with a presentation compiler architecture: semantic slide types as argument units, layout registry separating content from rendering, style presets (Sierkovitz/Rhystic/Limited Level Ups), narrative planner, density controls, speaker notes generation, evidence transparency modes, image selection strategy, section-level overrides, argument-graph linearization, multi-output targets (deck/short-video/article), iterative refinement loop, eventual presenter mode.</p>
+<p><strong>Related project:</strong> mtg-research</p>
+<p><strong>Complexity:</strong> project — by itself this is a substantial system</p>
+<p><strong>Prerequisites:</strong> the topic packet format must exist and be stable (depends on Appendix C decision); at least one working end-to-end theme exists in the v1 pipeline; explicitly supersedes the v1 slideshow generator from Appendix A item 8 — do not build both</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<p><strong>Verbatim spec:</strong> see Appendix D</p>
+<hr>
+<h3>PARKED IDEA: Tweet-archive mining for topic generation</h3>
+<p><strong>Description:</strong> User asked to generate 100 topics for &quot;MTG&#x27;s most magical keywords&quot; by mining their tweets on historical magic and alchemy. Tweet archive is not currently accessible at <code>C:\Dev\SocialsDB</code> (metadata shows 1 twitter entry, no DB file). When archive becomes available, re-rank the keyword topic list (<code>MTGSLIDER/writing/100_magical_keywords.md</code>) by tweet attention or sentiment.</p>
+<p><strong>Related project:</strong> mtg-research / SocialsDB</p>
+<p><strong>Complexity:</strong> sprint</p>
+<p><strong>Prerequisites:</strong> locate or import a tweet archive into a queryable form; FTS5 index over tweet text; topic-extraction pass</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Artist-character types from Claudiens / EmeraldTablet / alchemy_scryfall</h3>
+<p><strong>Description:</strong> Cross-reference MTG card artists and character archetypes (alchemists, magicians, scholars, artisans) against the user&#x27;s scholarly databases. Goal: surface MTG cards whose flavor or art directly cites figures, motifs, or source-traditions documented in <code>Claudiens/</code>, <code>EmeraldTablet/</code>, <code>alchemy_scryfall/</code>, <code>renaissance magic/</code>. Blocked on a federated query layer across those SQLite files.</p>
+<p><strong>Related project:</strong> mtg-research + Claudiens + EmeraldTablet</p>
+<p><strong>Complexity:</strong> sprint</p>
+<p><strong>Prerequisites:</strong> federated read layer across the user&#x27;s scholarly SQLite databases (see <code>MTGSLIDER/writing/CONTEXT_ENGINEERING.md</code>); shared provenance schema</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Literary/philosophical author tropes → MTG themes</h3>
+<p><strong>Description:</strong> Given a named author, alchemist, magician, or natural philosopher (Borges, Paracelsus, John Dee, Ficino, Eliade), find MTG cards/themes that illustrate their characteristic tropes. The <code>mtg-historical-trip</code> skill (<code>source_type: biography</code>) already provides the per-source workflow; the parked piece is the <em>batch curation UI</em> — a way to maintain a reusable list of authors and re-run their trip cards as new MTG sets are released.</p>
+<p><strong>Related project:</strong> mtg-research</p>
+<p><strong>Complexity:</strong> session (batch UI) — sprint (with archival storage)</p>
+<p><strong>Prerequisites:</strong> <code>mtg-historical-trip</code> skill (DONE); a persistent author-list table in MTGSLIDER&#x27;s SQLite schema</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Competitive Magic history ingest (all formats, all eras)</h3>
+<p><strong>Description:</strong> Ingest the full competitive history of MTG into MTGSLIDER — tournament results, decklists, archetype membership, format-defining decks (Caw-Blade, Hogaak, Affinity, Combo Winter, etc.). Sources: MTGTop8, MTG Wiki archetype pages, Wizards&#x27; coverage articles, MTGGoldfish. Architecture is laid out in <a href="writing/DECKARD_BOUNDARY_PLAN.md">DECKARD_BOUNDARY_PLAN.md</a> D3/D5/D6/V4 — deterministic parsing, scrape-vs-cite boundary per source, full provenance. Lets the system answer &quot;which cards in the defining deck of archetype X were instances of theme Y.&quot;</p>
+<p><strong>Related project:</strong> mtg-research</p>
+<p><strong>Complexity:</strong> project (multi-week to multi-month)</p>
+<p><strong>Prerequisites:</strong> Decision on first slice (recommend ONE format + ONE recent year + ONE source as the proving slice); ToS review per source; <code>format/era taxonomy</code> and <code>B&amp;R timeline</code> from PARKING_LOT Appendix B (or built fresh)</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Multilingual term-relationships browsing UI</h3>
+<p><strong>Description:</strong> Website section over a <code>term_relationships</code> table where users can navigate from an English magical term (conjure, sorcery, alchemy, talisman) back through its source-language chain (Greek, Latin, Arabic, Hebrew, Old Norse, French, German), then sideways to cognates and cousins, with linguistic + cultural commentary. Data layer is in place: the <code>mtg-historical-trip</code> skill&#x27;s etymology template now has <code>Source-language chain</code> and <code>Cognates and cousins</code> sections. UI is the parked piece.</p>
+<p><strong>Related project:</strong> mtg-research (website extension)</p>
+<p><strong>Complexity:</strong> sprint</p>
+<p><strong>Prerequisites:</strong> <code>historical_trips</code> table in MTGSLIDER schema; ~20+ etymology cards generated as a usable corpus; static-site generator (parked separately)</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: ChatGPT chat-archive ingest for MTG project archaeology</h3>
+<p><strong>Description:</strong> Ingest the user&#x27;s ChatGPT chat history (OpenAI data export ZIP), extract MTG-related conversations, design ideas, and &quot;desires&quot;, and federate the results into MTGSLIDER&#x27;s context layer. Architecture in <a href="writing/DECKARD_BOUNDARY_PLAN_chatgpt_ingest.md">DECKARD_BOUNDARY_PLAN_chatgpt_ingest.md</a>. Critical wall: extracted desires never auto-promote to ROADMAP — they enter PARKING_LOT for normal scoping discipline.</p>
+<p><strong>Related project:</strong> SocialsDB-adjacent; new project at e.g. <code>C:\Dev\ChatGPTArchive\</code></p>
+<p><strong>Complexity:</strong> project</p>
+<p><strong>Prerequisites:</strong> Locate or fetch a fresh OpenAI chat export; confirm format; decide on private-content gate threshold; pick first slice (likely: ingest archive, run keyword-relevance pass, do not invoke LLM extraction in slice 1)</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Live MTG Arena overlay integration with MTGDraftOverlay</h3>
+<p><strong>Description:</strong> Integrate MTGSLIDER&#x27;s curated content (themes, packets, historical-trip cards, multilingual etymology) with the existing <code>C:\Dev\MTGDraftOverlay\</code> Node.js project so that during MTG Arena gameplay (draft and constructed) the overlay can show transparent, toggleable commentary tabs alongside its existing 17Lands draft-rating panels. Full integration analysis at <a href="writing/OVERLAY_INTEGRATION.md">writing/OVERLAY_INTEGRATION.md</a>. Critical Deckard rule: NO LLM invocation in the live gameplay path — content is pre-computed offline, served deterministically at runtime.</p>
+<p><strong>Related project:</strong> MTGSLIDER + MTGDraftOverlay</p>
+<p><strong>Complexity:</strong> sprint (smallest viable slice = 5 hand-curated cards on a single new &quot;Historical&quot; tab in draft mode); project (full constructed-mode + full content corpus)</p>
+<p><strong>Prerequisites:</strong> <code>historical_trips</code> table in MTGSLIDER schema; ~5+ curated trip cards as proving content; Node-side SQLite handle (<code>better-sqlite3</code>); minimal MTGDraftOverlay extension to render a <code>CommentaryPanel</code>-shaped tab</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<h3>PARKED IDEA: Federated context-engineering layer across user databases</h3>
+<p><strong>Description:</strong> A unified query layer over Claudiens, EmeraldTablet, alchemy_scryfall, renaissance magic, MTGSLIDER, SocialsDB. Goal: enable cross-database queries like &quot;which MTG cards have flavor that cites a concept also found in EmeraldTablet&#x27;s hermetic concept index?&quot; — without forcing a monolithic schema. Recommendation document at <code>MTGSLIDER/writing/CONTEXT_ENGINEERING.md</code> describes the proposed shape (federated SQLite + shared provenance schema + per-database read APIs). Building it is its own multi-week project.</p>
+<p><strong>Related project:</strong> workspace-level (spans many)</p>
+<p><strong>Complexity:</strong> project</p>
+<p><strong>Prerequisites:</strong> see CONTEXT_ENGINEERING.md</p>
+<p><strong>Status:</strong> PARKED</p>
+<p><strong>Date:</strong> 2026-04-24</p>
+<hr>
+<h2>Scope Discipline Notes</h2>
+<ul>
+<li>Total parked surface area: ~30 subsystems plus one architectural pivot plus one major rewrite of an unbuilt component.</li>
+<li>The v1 slideshow generator (Appendix A, item 8) is superseded by the presentation compiler (Appendix D). Do not build the v1 if the compiler reframe is accepted.</li>
+<li>The topic-first reframe (Appendix C) changes the shape of Appendices A and B. Resolve the reframe question before scoping any slice from A or B.</li>
+<li>A reasonable first vertical slice (when scoping happens) might be: Scryfall lookup → image fetch → minimal SQLite schema → manual theme curation → one .pptx export, on a single narrow theme. Everything else is deferred until that proves the loop.</li>
+</ul>
+<hr>
+<h2>SCOPE WARNING</h2>
+<p>If the user tries to start working on any parked idea above without re-scoping:</p>
+<blockquote><strong>SCOPE WARNING:</strong> This idea is parked. To work on it, first re-freeze scope with <code>/plan-joe-chip-scope</code> to include it, or start it as a separate project.</blockquote>
+<hr>
+<h1>Appendix A — Spec Dump 1 (Verbatim)</h1>
+<h2>Build the Scryfall API service</h2>
+<p>Build a clean Scryfall API service module.</p>
+<p>Scope:</p>
+<ul>
+<li>Search cards by name, oracle text, type line, color, commander identity, set, format legality, and art/theme keywords.</li>
+<li>Support exact lookup, fuzzy lookup, and paginated search.</li>
+<li>Return normalized card objects with:</li>
+</ul>
+<p>  - name</p>
+<p>  - mana_cost</p>
+<p>  - type_line</p>
+<p>  - oracle_text</p>
+<p>  - colors</p>
+<p>  - color_identity</p>
+<p>  - legalities</p>
+<p>  - set info</p>
+<p>  - image_uris</p>
+<p>  - artist</p>
+<p>  - prices if available</p>
+<p>  - Scryfall URI</p>
+<ul>
+<li>Handle double-faced cards correctly.</li>
+<li>Add caching so repeated searches do not hammer the API.</li>
+<li>Include rate-limit-safe request handling.</li>
+<li>Write tests using mocked API responses.</li>
+</ul>
+<p>Do not build UI yet. This is only the data access layer.</p>
+<h2>Build the card image retrieval pipeline</h2>
+<p>Build a card image retrieval and storage pipeline using the Scryfall service.</p>
+<p>Features:</p>
+<ul>
+<li>Given a list of card names or Scryfall IDs, download the best available card images.</li>
+<li>Support normal, large, png, art_crop, and border_crop image variants.</li>
+<li>For double-faced cards, save both faces with deterministic filenames.</li>
+<li>Store image metadata in a local JSON or SQLite table.</li>
+<li>Avoid duplicate downloads.</li>
+<li>Record provenance:</li>
+</ul>
+<p>  - Scryfall ID</p>
+<p>  - image URL</p>
+<p>  - download timestamp</p>
+<p>  - card face</p>
+<p>  - image type</p>
+<ul>
+<li>Add a CLI command:</li>
+</ul>
+<p>  python tools/fetch_card_images.py --cards input/cards.json --variant large</p>
+<p>Keep this independent from slideshow generation.</p>
+<h2>Build the Magic format history research schema</h2>
+<p>Design and implement a research schema for Magic card historical importance.</p>
+<p>Use SQLite.</p>
+<p>Tables should cover:</p>
+<ul>
+<li>cards</li>
+<li>formats</li>
+<li>eras</li>
+<li>archetypes</li>
+<li>decklists</li>
+<li>tournament_results</li>
+<li>article_sources</li>
+<li>card_format_assessments</li>
+<li>claims</li>
+<li>citations</li>
+</ul>
+<p>The key model is:</p>
+<p>A card can be important in one format during one era for one reason, but irrelevant in another.</p>
+<p>Each assessment needs:</p>
+<ul>
+<li>card_id</li>
+<li>format</li>
+<li>era/date range</li>
+<li>archetype if applicable</li>
+<li>importance rating</li>
+<li>role: staple, sideboard card, build-around, role-player, casual-only, fringe, banned/restricted, obsolete</li>
+<li>evidence summary</li>
+<li>citations</li>
+<li>confidence level</li>
+<li>review status</li>
+</ul>
+<p>Do not scrape yet. Build schema, migration, seed data, and documentation.</p>
+<h2>Build the web research ingestion module</h2>
+<p>Build a research ingestion module for gathering evidence about Magic cards from the web.</p>
+<p>Scope:</p>
+<ul>
+<li>Accept search topics like:</li>
+</ul>
+<p>  - &quot;important zombie cards in Legacy&quot;</p>
+<p>  - &quot;history of Counterspell in Pauper&quot;</p>
+<p>  - &quot;best book-themed Magic cards&quot;</p>
+<ul>
+<li>Generate structured research queries.</li>
+<li>Store discovered URLs, titles, snippets, source type, and retrieval date.</li>
+<li>Allow manual import of article text or notes.</li>
+<li>Extract candidate claims like:</li>
+</ul>
+<p>  - card X was a staple in format Y</p>
+<p>  - card X was banned in format Y</p>
+<p>  - card X appeared in archetype Z</p>
+<p>  - card X was mostly casual</p>
+<ul>
+<li>Every extracted claim must be linked to a source.</li>
+<li>Use review_status = unreviewed by default.</li>
+</ul>
+<p>Do not make unsupported claims look verified.</p>
+<h2>Build the decklist/tournament evidence parser</h2>
+<p>Build a parser for decklist and tournament evidence.</p>
+<p>Inputs:</p>
+<ul>
+<li>MTGTop8-style copied text</li>
+<li>tournament decklist pages saved as HTML</li>
+<li>plain text decklists</li>
+<li>CSV exports</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>normalized decklists</li>
+<li>card counts</li>
+<li>archetype labels if available</li>
+<li>format</li>
+<li>event name</li>
+<li>date</li>
+<li>placement</li>
+<li>source URL</li>
+</ul>
+<p>Features:</p>
+<ul>
+<li>Detect mainboard vs sideboard.</li>
+<li>Normalize card names through Scryfall fuzzy lookup.</li>
+<li>Store parsed data in SQLite.</li>
+<li>Produce aggregate stats:</li>
+</ul>
+<p>  - number of appearances per card</p>
+<p>  - number of decks per archetype</p>
+<p>  - sideboard-only vs mainboard use</p>
+<p>  - date range of appearances</p>
+<p>Keep this as evidence, not final interpretation.</p>
+<h2>Build the thematic card discovery engine</h2>
+<p>Build a thematic discovery engine for finding Magic cards by theme.</p>
+<p>Example themes:</p>
+<ul>
+<li>zombies</li>
+<li>books</li>
+<li>libraries</li>
+<li>scholars</li>
+<li>alchemy</li>
+<li>dreams</li>
+<li>masks</li>
+<li>insects</li>
+<li>ruins</li>
+<li>sea monsters</li>
+</ul>
+<p>Search across:</p>
+<ul>
+<li>card name</li>
+<li>type line</li>
+<li>oracle text</li>
+<li>flavor text if available</li>
+<li>art tags if available</li>
+<li>manual tags</li>
+<li>Scryfall syntax queries</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>ranked candidate cards</li>
+<li>reason for match</li>
+<li>matching field</li>
+<li>confidence</li>
+<li>image reference</li>
+<li>theme tags</li>
+</ul>
+<p>Include a manual override layer so I can mark:</p>
+<ul>
+<li>include</li>
+<li>exclude</li>
+<li>uncertain</li>
+<li>exemplar</li>
+</ul>
+<h2>Build the card evaluation essay generator</h2>
+<p>Build an essay planning module that turns researched cards into an organized Magic history essay.</p>
+<p>Input:</p>
+<ul>
+<li>theme or topic</li>
+<li>selected cards</li>
+<li>format assessments</li>
+<li>citations</li>
+<li>images</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>structured essay outline</li>
+<li>card-by-card sections</li>
+<li>format/era notes</li>
+<li>citations</li>
+<li>suggested slide titles</li>
+<li>image suggestions</li>
+</ul>
+<p>Essay structure should support:</p>
+<ul>
+<li>introduction to the theme</li>
+<li>early history</li>
+<li>competitive history by format</li>
+<li>casual/Commander relevance</li>
+<li>notable design patterns</li>
+<li>conclusion</li>
+</ul>
+<p>Do not hallucinate. If evidence is weak, write &quot;uncertain&quot; or &quot;needs review.&quot;</p>
+<h2>Build the slideshow generator</h2>
+<p>Build a slideshow generator for Magic card research outputs.</p>
+<p>Input:</p>
+<ul>
+<li>essay outline JSON</li>
+<li>selected card image metadata</li>
+<li>card assessments</li>
+<li>citations</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>PowerPoint .pptx</li>
+</ul>
+<p>Slide types:</p>
+<ul>
+<li>title slide</li>
+<li>thesis/context slide</li>
+<li>card spotlight slide</li>
+<li>format history slide</li>
+<li>archetype slide</li>
+<li>comparison slide</li>
+<li>citation/source slide</li>
+</ul>
+<p>Card spotlight slides should include:</p>
+<ul>
+<li>card image</li>
+<li>name</li>
+<li>format/era relevance</li>
+<li>short notes</li>
+<li>citation footer</li>
+</ul>
+<p>Support layouts for:</p>
+<ul>
+<li>one card</li>
+<li>two cards</li>
+<li>four-card grid</li>
+<li>timeline slide</li>
+</ul>
+<p>Keep generation deterministic and template-driven.</p>
+<h2>Build the review dashboard</h2>
+<p>Build a lightweight local review dashboard.</p>
+<p>Use static HTML or a small Flask app.</p>
+<p>Purpose:</p>
+<p>Review and correct research before generating essays or slides.</p>
+<p>Views:</p>
+<ul>
+<li>cards by theme</li>
+<li>claims needing review</li>
+<li>cards missing images</li>
+<li>cards with conflicting assessments</li>
+<li>format history timeline</li>
+<li>source list</li>
+<li>slideshow preview queue</li>
+</ul>
+<p>Actions:</p>
+<ul>
+<li>approve claim</li>
+<li>reject claim</li>
+<li>edit summary</li>
+<li>change confidence</li>
+<li>add manual note</li>
+<li>include/exclude card from final output</li>
+</ul>
+<p>Do not overbuild. Prioritize fast correction and provenance visibility.</p>
+<h2>Build the orchestration CLI</h2>
+<p>Build a top-level CLI that orchestrates the full Magic research pipeline.</p>
+<p>Commands:</p>
+<ul>
+<li>mtg-research search-theme &quot;zombies&quot;</li>
+<li>mtg-research fetch-images --theme zombies</li>
+<li>mtg-research ingest-source --url URL</li>
+<li>mtg-research parse-decklist file.txt</li>
+<li>mtg-research assess-card &quot;Gravecrawler&quot; --format Modern</li>
+<li>mtg-research build-essay --theme zombies</li>
+<li>mtg-research build-slides --theme zombies</li>
+<li>mtg-research review-dashboard</li>
+</ul>
+<p>Design rules:</p>
+<ul>
+<li>Each command should call service classes, not contain business logic.</li>
+<li>Every output should be written to a deterministic folder.</li>
+<li>Every generated artifact should include provenance.</li>
+<li>Never silently overwrite reviewed data.</li>
+<li>Add a README showing example workflows.</li>
+</ul>
+<hr>
+<h1>Appendix B — Spec Dump 2 (Verbatim)</h1>
+<h2>Build the format/era taxonomy module</h2>
+<p>Build a controlled vocabulary module for Magic formats and eras.</p>
+<p>Include:</p>
+<ul>
+<li>Standard</li>
+<li>Modern</li>
+<li>Legacy</li>
+<li>Vintage</li>
+<li>Pioneer</li>
+<li>Pauper</li>
+<li>Commander</li>
+<li>Limited</li>
+<li>Block Constructed</li>
+<li>Extended</li>
+<li>Premodern</li>
+<li>Old School</li>
+</ul>
+<p>For each format, model:</p>
+<ul>
+<li>start date</li>
+<li>active/inactive status</li>
+<li>rotation behavior</li>
+<li>banned/restricted list URL field</li>
+<li>common evidence sources</li>
+<li>notes on interpretation</li>
+</ul>
+<p>Also define eras:</p>
+<ul>
+<li>Alpha–Revised</li>
+<li>Early Type II</li>
+<li>Combo Winter</li>
+<li>Invasion/Odyssey era</li>
+<li>Mirrodin era</li>
+<li>Ravnica era</li>
+<li>Modern founding period</li>
+<li>FIRE design era</li>
+<li>Commander boom</li>
+<li>Arena era</li>
+</ul>
+<p>Make the taxonomy editable, but do not let arbitrary strings leak into the database.</p>
+<h2>Build the banned/restricted list tracker</h2>
+<p>Build a banned/restricted list tracker.</p>
+<p>Scope:</p>
+<ul>
+<li>Store official banned/restricted events by format and date.</li>
+<li>Link affected cards to the announcement source.</li>
+<li>Track whether a card was banned, restricted, unbanned, or unrestricted.</li>
+<li>Support manual import first.</li>
+<li>Add fields for:</li>
+</ul>
+<p>  - announcement date</p>
+<p>  - effective date</p>
+<p>  - format</p>
+<p>  - card name</p>
+<p>  - action</p>
+<p>  - source URL</p>
+<p>  - summary</p>
+<p>  - confidence</p>
+<p>  - review status</p>
+<p>The goal is not live automation yet. The goal is reliable historical context for card evaluations.</p>
+<h2>Build the archetype ontology</h2>
+<p>Build an archetype ontology for Magic deck history.</p>
+<p>Model archetypes as first-class entities:</p>
+<ul>
+<li>Aggro</li>
+<li>Control</li>
+<li>Midrange</li>
+<li>Combo</li>
+<li>Tempo</li>
+<li>Prison</li>
+<li>Ramp</li>
+<li>Reanimator</li>
+<li>Tribal</li>
+<li>Aristocrats</li>
+<li>Burn</li>
+<li>Storm</li>
+<li>Dredge</li>
+<li>Affinity</li>
+<li>Delver</li>
+<li>Tron</li>
+<li>Jund</li>
+<li>Faeries</li>
+<li>Caw-Blade</li>
+<li>Zombies</li>
+<li>Elves</li>
+<li>Goblins</li>
+<li>Merfolk</li>
+</ul>
+<p>Support parent/child archetypes:</p>
+<ul>
+<li>Tribal &gt; Zombies</li>
+<li>Combo &gt; Storm</li>
+<li>Aggro-Control &gt; Delver</li>
+<li>Artifact Aggro &gt; Affinity</li>
+</ul>
+<p>Each archetype should have:</p>
+<ul>
+<li>description</li>
+<li>formats where relevant</li>
+<li>date range</li>
+<li>key cards</li>
+<li>source citations</li>
+<li>review status</li>
+</ul>
+<p>Do not hard-code this into essay generation. Make it reusable data.</p>
+<h2>Build the claim conflict detector</h2>
+<p>Build a claim conflict detector for Magic research.</p>
+<p>Detect cases like:</p>
+<ul>
+<li>one source says a card was format-defining, another says fringe</li>
+<li>a card is marked legal during a period when it was banned</li>
+<li>a card is assigned to the wrong format era</li>
+<li>a card appears in an archetype before its print date</li>
+<li>decklist data contradicts an essay claim</li>
+<li>duplicate claims with different confidence levels</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>conflict type</li>
+<li>affected card</li>
+<li>affected format/era</li>
+<li>conflicting claims</li>
+<li>source references</li>
+<li>suggested resolution</li>
+<li>severity</li>
+</ul>
+<p>Do not auto-resolve conflicts. Write them to a review queue.</p>
+<h2>Build the source credibility scoring layer</h2>
+<p>Build a source credibility layer for Magic research.</p>
+<p>Classify sources as:</p>
+<ul>
+<li>official Wizards announcement</li>
+<li>Scryfall data</li>
+<li>tournament database</li>
+<li>decklist archive</li>
+<li>strategy article</li>
+<li>forum thread</li>
+<li>Reddit discussion</li>
+<li>wiki page</li>
+<li>personal blog</li>
+<li>YouTube transcript</li>
+<li>unknown</li>
+</ul>
+<p>Each source should get:</p>
+<ul>
+<li>source_type</li>
+<li>authority_score</li>
+<li>date</li>
+<li>author if available</li>
+<li>URL</li>
+<li>title</li>
+<li>notes</li>
+<li>review status</li>
+</ul>
+<p>Use the score only as a guide. Do not let it automatically turn claims into verified facts.</p>
+<h2>Build the card-printing timeline service</h2>
+<p>Build a card printing timeline service using Scryfall data.</p>
+<p>For any card, retrieve:</p>
+<ul>
+<li>first printing date</li>
+<li>all printings</li>
+<li>sets</li>
+<li>rarities</li>
+<li>reprints</li>
+<li>promo versions</li>
+<li>digital-only status</li>
+<li>commander/precon appearances if available</li>
+<li>image per printing</li>
+</ul>
+<p>Use this to support:</p>
+<ul>
+<li>“when did this card enter the ecosystem?”</li>
+<li>“was this card available in this format at that time?”</li>
+<li>“which artwork should be used for this era?”</li>
+</ul>
+<p>Expose as a service used by essays, slides, and validation.</p>
+<h2>Build the legality validator</h2>
+<p>Build a legality validator.</p>
+<p>Given:</p>
+<ul>
+<li>card</li>
+<li>format</li>
+<li>date or era</li>
+</ul>
+<p>Return:</p>
+<ul>
+<li>legal</li>
+<li>banned</li>
+<li>restricted</li>
+<li>not yet printed</li>
+<li>rotated out</li>
+<li>unknown</li>
+</ul>
+<p>Inputs:</p>
+<ul>
+<li>Scryfall legalities</li>
+<li>local banned/restricted timeline</li>
+<li>format taxonomy</li>
+<li>card printing timeline</li>
+</ul>
+<p>Important:</p>
+<p>Scryfall gives current legality. Historical legality must come from the local timeline and format rules.</p>
+<p>Flag uncertain cases for review.</p>
+<h2>Build the art/theme annotation module</h2>
+<p>Build an annotation module for card art and themes.</p>
+<p>For each card or card face, allow manual annotations:</p>
+<ul>
+<li>visible objects</li>
+<li>creature type/theme</li>
+<li>setting</li>
+<li>mood</li>
+<li>symbolic motifs</li>
+<li>color palette notes</li>
+<li>composition notes</li>
+<li>relevance to chosen theme</li>
+<li>image quality</li>
+<li>slide suitability</li>
+</ul>
+<p>Example:</p>
+<p>For a “books in Magic” theme, mark cards that visibly show books, scrolls, libraries, scholars, desks, archives, or magical writing.</p>
+<p>This should be human-reviewable. Do not pretend visual tags are certain unless manually confirmed.</p>
+<h2>Build the card cluster/comparison engine</h2>
+<p>Build a comparison engine for grouping cards.</p>
+<p>Support grouping by:</p>
+<ul>
+<li>mechanic</li>
+<li>creature type</li>
+<li>format role</li>
+<li>archetype</li>
+<li>era</li>
+<li>color identity</li>
+<li>mana value</li>
+<li>flavor theme</li>
+<li>art motif</li>
+<li>competitive importance</li>
+<li>casual/Commander relevance</li>
+</ul>
+<p>Output clusters like:</p>
+<ul>
+<li>“Zombie recursive threats”</li>
+<li>“Zombie lords”</li>
+<li>“Graveyard engines”</li>
+<li>“Sideboard graveyard hate”</li>
+<li>“Bookish blue card draw”</li>
+<li>“Library-as-place cards”</li>
+<li>“Alchemy-themed artifacts”</li>
+</ul>
+<p>Use this to generate essay sections and slideshow group slides.</p>
+<h2>Build the static website exporter</h2>
+<p>Build a static website exporter for researched Magic topics.</p>
+<p>Input:</p>
+<ul>
+<li>theme/topic project data</li>
+<li>essay markdown</li>
+<li>card images</li>
+<li>citations</li>
+<li>card assessments</li>
+<li>timelines</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>static HTML/CSS/JS site</li>
+</ul>
+<p>Pages:</p>
+<ul>
+<li>topic home</li>
+<li>card gallery</li>
+<li>format history</li>
+<li>archetype history</li>
+<li>sources</li>
+<li>review status page</li>
+<li>image credits</li>
+</ul>
+<p>Requirements:</p>
+<ul>
+<li>no heavy framework</li>
+<li>deterministic build output</li>
+<li>local assets only after fetch step</li>
+<li>provenance visible</li>
+<li>uncertainty badges visible</li>
+<li>mobile-friendly card gallery</li>
+</ul>
+<p>This should mirror the same data used for the slideshow, not create a separate content system.</p>
+<hr>
+<h1>Appendix C — Spec Dump 3 (Verbatim)</h1>
+<blockquote>Prefixed by user with: &quot;Yes. Make that a first-class topic intelligence database, not just a search log.&quot;</blockquote>
+<p>&gt;</p>
+<blockquote>Key abstraction: <strong>Topic = any research target worth developing into cards, claims, images, essays, slides, or web pages.</strong> Examples include alchemists, lab furniture, books, dreams, tempo merfolk, zombie archetypes in limited, black recursive one-drops, cards showing desks, graveyard engines in Pioneer.</blockquote>
+<h2>Build the topic model</h2>
+<p>Build a Topic Intelligence schema for the Magic research project.</p>
+<p>A topic is any user-entered research subject, including:</p>
+<ul>
+<li>flavor theme: alchemists, books, dreams</li>
+<li>visual motif: lab furniture, desks, masks</li>
+<li>mechanical theme: sacrifice outlets, recursion, tempo</li>
+<li>archetype: Tempo Merfolk, Zombie Limited archetypes</li>
+<li>historical subject: Combo Winter, Caw-Blade</li>
+<li>format-specific question: Zombies in Limited, Merfolk in Modern</li>
+</ul>
+<p>Create SQLite tables:</p>
+<ul>
+<li>topics</li>
+<li>topic_aliases</li>
+<li>topic_types</li>
+<li>topic_properties</li>
+<li>topic_card_links</li>
+<li>topic_source_links</li>
+<li>topic_claim_links</li>
+<li>topic_relationships</li>
+<li>topic_review_notes</li>
+</ul>
+<p>Each topic should have:</p>
+<ul>
+<li>canonical_name</li>
+<li>slug</li>
+<li>topic_type</li>
+<li>short_description</li>
+<li>research_status</li>
+<li>confidence</li>
+<li>created_at</li>
+<li>updated_at</li>
+<li>review_status</li>
+</ul>
+<p>Do not reduce topics to tags. Topics need their own durable identity.</p>
+<h2>Build topic property extraction</h2>
+<p>Build a topic property extraction module.</p>
+<p>Given a topic like &quot;lab furniture&quot;, &quot;alchemists&quot;, or &quot;tempo merfolk&quot;, infer candidate properties worth researching.</p>
+<p>Property examples:</p>
+<p>For &quot;alchemists&quot;:</p>
+<ul>
+<li>associated creature types</li>
+<li>color identity tendencies</li>
+<li>recurring mechanics</li>
+<li>art motifs</li>
+<li>notable cards</li>
+<li>historical formats</li>
+<li>related planes</li>
+<li>source traditions</li>
+<li>terminology variants</li>
+</ul>
+<p>For &quot;lab furniture&quot;:</p>
+<ul>
+<li>visible objects</li>
+<li>art crops</li>
+<li>card types likely to show it</li>
+<li>related motifs: books, bottles, instruments, desks, scrolls</li>
+<li>image suitability</li>
+</ul>
+<p>For &quot;tempo merfolk&quot;:</p>
+<ul>
+<li>format relevance</li>
+<li>key cards</li>
+<li>archetype role</li>
+<li>era range</li>
+<li>typical interaction package</li>
+<li>lords</li>
+<li>mana curve</li>
+<li>evidence sources</li>
+</ul>
+<p>Store properties as typed records:</p>
+<ul>
+<li>property_name</li>
+<li>property_value</li>
+<li>property_type</li>
+<li>source</li>
+<li>confidence</li>
+<li>review_status</li>
+</ul>
+<p>All inferred properties start as unreviewed.</p>
+<h2>Build topic relationship graph</h2>
+<p>Build a topic relationship graph.</p>
+<p>Topics can relate to other topics as:</p>
+<ul>
+<li>broader_than</li>
+<li>narrower_than</li>
+<li>overlaps_with</li>
+<li>visual_motif_of</li>
+<li>archetype_variant_of</li>
+<li>format_instance_of</li>
+<li>historically_related_to</li>
+<li>mechanically_related_to</li>
+<li>flavor_related_to</li>
+<li>contradicts</li>
+<li>alias_of</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>&quot;lab furniture&quot; overlaps_with &quot;alchemy&quot;</li>
+<li>&quot;alchemists&quot; flavor_related_to &quot;artifacts&quot;</li>
+<li>&quot;tempo merfolk&quot; archetype_variant_of &quot;merfolk&quot;</li>
+<li>&quot;zombie archetypes in limited&quot; format_instance_of &quot;zombies&quot;</li>
+<li>&quot;recursive zombies&quot; mechanically_related_to &quot;graveyard recursion&quot;</li>
+</ul>
+<p>Implement graph queries:</p>
+<ul>
+<li>show related topics</li>
+<li>expand topic research scope</li>
+<li>find sibling topics</li>
+<li>find cards shared by two topics</li>
+<li>find topics with weak evidence</li>
+</ul>
+<p>Keep this separate from the card database.</p>
+<h2>Build topic-to-card linking</h2>
+<p>Build a topic-to-card linking service.</p>
+<p>Given a topic, link candidate cards using:</p>
+<ul>
+<li>Scryfall search</li>
+<li>local card text</li>
+<li>type line</li>
+<li>flavor text</li>
+<li>manual art annotations</li>
+<li>existing claims</li>
+<li>decklist evidence</li>
+<li>manual includes/excludes</li>
+</ul>
+<p>Each link should record:</p>
+<ul>
+<li>topic_id</li>
+<li>card_id</li>
+<li>link_reason</li>
+<li>link_type: name_match, type_match, oracle_match, flavor_match, art_match, archetype_evidence, manual</li>
+<li>confidence</li>
+<li>include_status: include, exclude, uncertain, exemplar</li>
+<li>review_status</li>
+</ul>
+<p>A card can be linked to the same topic for multiple reasons.</p>
+<p>Example:</p>
+<p>&quot;Laboratory Maniac&quot; links to:</p>
+<ul>
+<li>lab furniture: weak visual/name relation</li>
+<li>alchemists/scholars: possible flavor relation</li>
+<li>alternate win conditions: strong mechanical relation</li>
+</ul>
+<h2>Build topic research packets</h2>
+<p>Build a Topic Research Packet generator.</p>
+<p>For any topic, output a JSON and Markdown packet containing:</p>
+<ul>
+<li>topic summary</li>
+<li>aliases</li>
+<li>related topics</li>
+<li>candidate cards</li>
+<li>exemplar cards</li>
+<li>uncertain cards</li>
+<li>excluded cards</li>
+<li>known format relevance</li>
+<li>visual motifs</li>
+<li>mechanical motifs</li>
+<li>unresolved questions</li>
+<li>sources</li>
+<li>claims needing review</li>
+<li>slideshow potential</li>
+</ul>
+<p>This packet is the handoff format for essay generation, slide generation, and review.</p>
+<p>Command:</p>
+<p>python tools/build_topic_packet.py &quot;tempo merfolk&quot;</p>
+<h2>Build topic-specific evidence scoring</h2>
+<p>Build evidence scoring for topic-card relationships.</p>
+<p>Different topics need different evidence rules.</p>
+<p>For flavor topics:</p>
+<ul>
+<li>name match is medium evidence</li>
+<li>flavor text is medium evidence</li>
+<li>art annotation is strong evidence</li>
+<li>oracle text may be weak or irrelevant</li>
+</ul>
+<p>For archetype topics:</p>
+<ul>
+<li>decklist appearance is strong evidence</li>
+<li>strategy article mention is medium evidence</li>
+<li>creature type alone is weak evidence</li>
+</ul>
+<p>For visual motif topics:</p>
+<ul>
+<li>manual art annotation is strong evidence</li>
+<li>card name is weak evidence</li>
+<li>art crop availability matters</li>
+</ul>
+<p>For format-history topics:</p>
+<ul>
+<li>tournament/decklist evidence is strong</li>
+<li>current legality is not enough</li>
+<li>casual popularity is separate</li>
+</ul>
+<p>Implement topic_type-specific scoring rules.</p>
+<h2>Build the topic review UI</h2>
+<p>Build a review UI for topic intelligence.</p>
+<p>Views:</p>
+<ul>
+<li>topic overview</li>
+<li>candidate cards</li>
+<li>topic properties</li>
+<li>related topics</li>
+<li>claims</li>
+<li>sources</li>
+<li>unresolved questions</li>
+</ul>
+<p>Actions:</p>
+<ul>
+<li>approve/reject topic-card link</li>
+<li>mark card as exemplar</li>
+<li>edit property</li>
+<li>merge duplicate topics</li>
+<li>add alias</li>
+<li>create related topic</li>
+<li>mark topic ready for essay</li>
+<li>mark topic ready for slides</li>
+</ul>
+<p>The UI must show uncertainty clearly.</p>
+<p>Do not hide weak evidence.</p>
+<h2>Build topic memory across projects</h2>
+<p>Build persistent topic memory.</p>
+<p>If I research &quot;alchemists&quot; once, later projects should reuse that knowledge.</p>
+<p>Requirements:</p>
+<ul>
+<li>Topic records persist independently of a single slideshow or essay.</li>
+<li>A topic can belong to many projects.</li>
+<li>A project can use many topics.</li>
+<li>Topic data should improve over time.</li>
+<li>Reviewed topic-card links should not be overwritten by new automated runs.</li>
+<li>New automated findings should be staged as candidates.</li>
+</ul>
+<p>Add tables:</p>
+<ul>
+<li>projects</li>
+<li>project_topics</li>
+<li>topic_snapshots</li>
+</ul>
+<p>Snapshots preserve what was known when a slideshow or essay was generated.</p>
+<h2>Build topic comparison tools</h2>
+<p>Build topic comparison tools.</p>
+<p>Commands:</p>
+<ul>
+<li>compare-topics &quot;alchemy&quot; &quot;lab furniture&quot;</li>
+<li>compare-topics &quot;tempo merfolk&quot; &quot;aggro merfolk&quot;</li>
+<li>compare-topics &quot;zombies in limited&quot; &quot;zombies in commander&quot;</li>
+</ul>
+<p>Output:</p>
+<ul>
+<li>shared cards</li>
+<li>unique cards</li>
+<li>shared properties</li>
+<li>conflicting properties</li>
+<li>format differences</li>
+<li>era differences</li>
+<li>visual motif differences</li>
+<li>mechanical differences</li>
+<li>sources supporting each distinction</li>
+</ul>
+<p>This should help generate more sophisticated essays instead of flat card lists.</p>
+<h2>Build the topic-first workflow</h2>
+<p>Refactor the Magic research pipeline around topics.</p>
+<p>The main workflow should be:</p>
+<ol>
+<li>User enters topic.</li>
+<li>System creates or retrieves topic record.</li>
+<li>System expands aliases and related concepts.</li>
+<li>System searches Scryfall.</li>
+<li>System fetches images.</li>
+<li>System searches/imports evidence.</li>
+<li>System proposes topic properties.</li>
+<li>User reviews candidates.</li>
+<li>System builds topic packet.</li>
+<li>System generates essay/slides/site from reviewed topic packet.</li>
+</ol>
+<p>Add CLI:</p>
+<p>mtg-topic create &quot;alchemists&quot;</p>
+<p>mtg-topic expand &quot;alchemists&quot;</p>
+<p>mtg-topic find-cards &quot;lab furniture&quot;</p>
+<p>mtg-topic review &quot;tempo merfolk&quot;</p>
+<p>mtg-topic packet &quot;zombie archetypes in limited&quot;</p>
+<p>mtg-topic compare &quot;alchemy&quot; &quot;books&quot;</p>
+<p>The important design rule: cards are not the center of the system; topics are. Cards, decklists, images, claims, and sources orbit the topic. This lets you build a reusable research memory instead of starting over every time.</p>
+<hr>
+<h1>Appendix D — Spec Dump 4 (Verbatim)</h1>
+<blockquote>Treat the slideshow generator as a <strong>presentation compiler</strong>, not a template filler. It should transform a structured topic packet into a lecture-ready artifact with controllable rhetorical structure, visual density, and evidence framing.</blockquote>
+<p>&gt;</p>
+<blockquote>The design problem splits into three layers: (1) slide semantics, (2) layout/rendering, (3) creator control surface.</blockquote>
+<h2>1) Slide semantics (what kinds of slides exist)</h2>
+<p>You need a richer ontology than &quot;title + bullets.&quot; Model slides as <strong>argument units</strong>.</p>
+<p>Core slide types:</p>
+<ul>
+<li><strong>Thesis / framing</strong> — establishes scope, claim, or question</li>
+<li><strong>Definition / taxonomy</strong> — what counts as &quot;zombie,&quot; &quot;tempo,&quot; etc.</li>
+<li><strong>Historical phase</strong> — era-based segmentation (e.g., Onslaught Zombies vs Innistrad Zombies)</li>
+<li><strong>Card spotlight</strong> — one card, tightly framed claim</li>
+<li><strong>Cluster / comparison</strong> — groups (lords vs recursive threats vs payoffs)</li>
+<li><strong>Deck archetype</strong> — representative list + role explanation</li>
+<li><strong>Mechanics breakdown</strong> — how something actually works (tempo, recursion loops)</li>
+<li><strong>Data / evidence</strong> — tournament frequency, winrate, appearance counts</li>
+<li><strong>Visual motif</strong> — art/theme slides (important for Rhystic-style content)</li>
+<li><strong>Counterpoint / mythbusting</strong> — &quot;this card is overrated,&quot; &quot;this archetype wasn&#x27;t actually dominant&quot;</li>
+<li><strong>Transition</strong> — bridges between sections</li>
+<li><strong>Conclusion / synthesis</strong></li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Extend the slideshow generator to support semantic slide types.</p>
+<p>    Each slide must declare:</p>
+<p>    - slide_type</p>
+<p>    - rhetorical_role</p>
+<p>    - required_fields</p>
+<p>    - optional_fields</p>
+<p>    Do not render yet. Only define the schema and validation rules.</p>
+<h2>2) Layout system (how slides look)</h2>
+<p>Separate <strong>content from layout completely</strong>.</p>
+<p>Each slide type can map to multiple layouts:</p>
+<ul>
+<li>single-image focus (card or art)</li>
+<li>split (image + text)</li>
+<li>grid (2–6 cards)</li>
+<li>timeline (era progression)</li>
+<li>comparison (left/right)</li>
+<li>data chart (bar, line)</li>
+<li>minimal (one sentence, big font)</li>
+<li>dense (for handout-style decks)</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Build a layout registry.</p>
+<p>    Each layout defines:</p>
+<p>    - slot structure (image slots, text blocks, caption areas)</p>
+<p>    - max content density</p>
+<p>    - typography scale</p>
+<p>    - spacing rules</p>
+<p>    Slides choose layout by compatibility with slide_type + user config.</p>
+<h2>3) Creator configuration surface</h2>
+<h3>A. Presentation style presets</h3>
+<p>Model after creators:</p>
+<ul>
+<li><strong>Sierkovitz style</strong> — data-heavy, tight claims, frequent charts, minimal flavor text</li>
+<li><strong>Rhystic Studies style</strong> — narrative, visual motifs, pacing slides, quotes</li>
+<li><strong>Limited Level Ups style</strong> — teaching-oriented, heuristics, gameplay scenarios, draft examples</li>
+</ul>
+<p>Config example:</p>
+<p>    {</p>
+<p>      &quot;style&quot;: &quot;rhystic&quot;,</p>
+<p>      &quot;verbosity&quot;: &quot;medium&quot;,</p>
+<p>      &quot;image_priority&quot;: &quot;high&quot;,</p>
+<p>      &quot;data_density&quot;: &quot;low&quot;</p>
+<p>    }</p>
+<p>Claude prompt:</p>
+<p>    Implement style presets that influence:</p>
+<p>    - slide sequencing</p>
+<p>    - slide types frequency</p>
+<p>    - layout selection</p>
+<p>    - text density</p>
+<p>    - image usage</p>
+<p>    - inclusion of quotes or data</p>
+<p>    Make presets composable, not hard-coded.</p>
+<h3>B. Narrative control</h3>
+<p>Let the creator define the <em>shape</em> of the talk.</p>
+<p>Options:</p>
+<ul>
+<li>chronological</li>
+<li>thematic</li>
+<li>mechanics-first</li>
+<li>format-first</li>
+<li>card-first</li>
+<li>argument-driven</li>
+</ul>
+<p>    {</p>
+<p>      &quot;narrative_mode&quot;: &quot;chronological&quot;,</p>
+<p>      &quot;sections&quot;: [</p>
+<p>        &quot;definition&quot;,</p>
+<p>        &quot;early_history&quot;,</p>
+<p>        &quot;peak_power&quot;,</p>
+<p>        &quot;modern_usage&quot;,</p>
+<p>        &quot;conclusion&quot;</p>
+<p>      ]</p>
+<p>    }</p>
+<p>Claude prompt:</p>
+<p>    Build a narrative planner.</p>
+<p>    Input:</p>
+<p>    - topic packet</p>
+<p>    - narrative_mode</p>
+<p>    - optional section overrides</p>
+<p>    Output:</p>
+<p>    - ordered slide plan with section boundaries</p>
+<h3>C. Density controls</h3>
+<p>Controls:</p>
+<ul>
+<li>slides_per_minute</li>
+<li>max_cards_per_slide</li>
+<li>max_words_per_slide</li>
+<li>include_speaker_notes (true/false)</li>
+<li>include_citations (inline vs appendix)</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Add density controls that constrain:</p>
+<p>    - number of slides</p>
+<p>    - content per slide</p>
+<p>    - grouping behavior (cluster vs individual card slides)</p>
+<h3>D. Speaker notes generation</h3>
+<p>Each slide should optionally include:</p>
+<ul>
+<li>expanded explanation</li>
+<li>historical context</li>
+<li>citations</li>
+<li>jokes / tone (optional)</li>
+<li>transition cues</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Add speaker_notes generation.</p>
+<p>    Notes must:</p>
+<p>    - expand claims without duplicating slide text</p>
+<p>    - include citations</p>
+<p>    - flag uncertainty</p>
+<p>    - optionally include rhetorical cues (pause, emphasis)</p>
+<h3>E. Evidence transparency modes</h3>
+<p>Modes:</p>
+<ul>
+<li><strong>clean</strong> (no citations visible)</li>
+<li><strong>annotated</strong> (footnotes on slides)</li>
+<li><strong>research mode</strong> (heavy provenance, confidence levels)</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Implement evidence modes.</p>
+<p>    Each mode controls:</p>
+<p>    - citation visibility</p>
+<p>    - confidence indicators</p>
+<p>    - inclusion of &quot;uncertain&quot; labels</p>
+<h3>F. Image strategy</h3>
+<p>Controls:</p>
+<ul>
+<li>prioritize card images vs art crops</li>
+<li>allow duplicates across slides</li>
+<li>enforce unique cards per section</li>
+<li>zoom/crop preferences</li>
+<li>include artist credit</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Build an image selection strategy.</p>
+<p>    Given candidate images:</p>
+<p>    - rank by relevance</p>
+<p>    - avoid redundancy</p>
+<p>    - select variant based on slide_type</p>
+<h3>G. Section-level customization</h3>
+<p>    {</p>
+<p>      &quot;sections&quot;: {</p>
+<p>        &quot;early_history&quot;: {</p>
+<p>          &quot;include&quot;: true,</p>
+<p>          &quot;max_slides&quot;: 5</p>
+<p>        },</p>
+<p>        &quot;competitive_analysis&quot;: {</p>
+<p>          &quot;include&quot;: true,</p>
+<p>          &quot;data_density&quot;: &quot;high&quot;</p>
+<p>        },</p>
+<p>        &quot;art_analysis&quot;: {</p>
+<p>          &quot;include&quot;: false</p>
+<p>        }</p>
+<p>      }</p>
+<p>    }</p>
+<p>Claude prompt:</p>
+<p>    Add section-level overrides that modify:</p>
+<p>    - slide count</p>
+<p>    - slide types allowed</p>
+<p>    - density</p>
+<p>    - layout preferences</p>
+<h2>4) Advanced features</h2>
+<h3>A. &quot;Argument graph&quot; → slides</h3>
+<p>Instead of linear generation, build a graph of claims, supporting evidence, counterclaims. Then linearize into slides.</p>
+<h3>B. Multi-output modes</h3>
+<p>Same topic → different outputs:</p>
+<ul>
+<li>lecture deck</li>
+<li>short-form YouTube deck</li>
+<li>Twitter thread outline</li>
+<li>article</li>
+</ul>
+<p>Claude prompt:</p>
+<p>    Allow output targets:</p>
+<p>    - slideshow</p>
+<p>    - short_video</p>
+<p>    - article</p>
+<p>    Each target uses the same topic packet but different constraints.</p>
+<h3>C. Iterative refinement loop</h3>
+<p>After generation: mark slides as weak, regenerate only that section, swap layouts without regenerating content.</p>
+<h3>D. Live presentation mode (later)</h3>
+<p>Presenter view with notes, timing cues, slide grouping, quick navigation by section.</p>
+<h2>5) What &quot;good&quot; looks like</h2>
+<p>A strong output deck should:</p>
+<ul>
+<li>feel like a <strong>coherent argument</strong>, not a list</li>
+<li>avoid repeating the same card without purpose</li>
+<li>show <strong>why something mattered</strong>, not just that it exists</li>
+<li>balance: cards, decks, formats, visuals</li>
+<li>allow the creator to talk naturally without reading slides</li>
+</ul>
+<h2>6) Synthesis prompt</h2>
+<p>    Refactor the slideshow generator into a presentation compiler.</p>
+<p>    Add:</p>
+<p>    - semantic slide types</p>
+<p>    - layout registry</p>
+<p>    - style presets (data-driven, narrative, teaching)</p>
+<p>    - narrative planner</p>
+<p>    - density controls</p>
+<p>    - speaker notes</p>
+<p>    - evidence modes</p>
+<p>    - image strategy</p>
+<p>    - section overrides</p>
+<p>    Ensure:</p>
+<p>    - full separation of content vs layout</p>
+<p>    - deterministic output given same inputs + config</p>
+<p>    - all uncertainty is preserved, not hidden</p>
+<p>If implemented correctly, entering <code>&quot;zombie archetypes in limited&quot;</code> could produce a Sierkovitz-style data lecture, a Rhystic-style narrative essay, or a Limited Level Ups teaching breakdown — without rewriting the underlying research.</p></main>
+<footer>Generated by tools/build_site.py · github.com/t3dy/MTGSLIDER</footer>
+</body></html>
