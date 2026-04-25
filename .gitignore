@@ -1,0 +1,19 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# local research state — checked OUT of git
+data/*.sqlite
+cache/scryfall/
+cache/images/
+themes/*/images/
+themes/*/out/
+
+# editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

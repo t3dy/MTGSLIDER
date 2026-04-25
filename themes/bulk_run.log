@@ -1,0 +1,237 @@
+C:\Users\PC\AppData\Roaming\Python\Python314\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (2.6.3) or chardet (7.4.1)/charset_normalizer (3.4.4) doesn't match a supported version!
+  warnings.warn(
+[  1/100] Dogs primer                                  
+        SKIP — already in index
+[  2/100] Cats primer                                  
+        SKIP — already in index
+[  3/100] Wizards primer                               
+        SKIP — already in index
+[  4/100] Zombies primer                               
+        SKIP — already in index
+[  5/100] Goblins primer                               
+        SKIP — already in index
+[  6/100] Elves primer                                 
+        OK — 20 staged, wrote elves-primer.compiler.definition-first.pptx
+[  7/100] Merfolk primer                               
+        OK — 20 staged, wrote merfolk-primer.compiler.definition-first.pptx
+[  8/100] Vampires primer                              
+        OK — 20 staged, wrote vampires-primer.compiler.definition-first.pptx
+[  9/100] Dragons primer                               
+        OK — 20 staged, wrote dragons-primer.compiler.definition-first.pptx
+[ 10/100] Angels primer                                
+        OK — 20 staged, wrote angels-primer.compiler.definition-first.pptx
+[ 11/100] Demons primer                                
+        OK — 20 staged, wrote demons-primer.compiler.definition-first.pptx
+[ 12/100] Knights primer                               
+        OK — 20 staged, wrote knights-primer.compiler.definition-first.pptx
+[ 13/100] Soldiers primer                              
+        OK — 20 staged, wrote soldiers-primer.compiler.definition-first.pptx
+[ 14/100] Faeries primer                               
+        OK — 20 staged, wrote faeries-primer.compiler.definition-first.pptx
+[ 15/100] Spirits primer                               
+        OK — 20 staged, wrote spirits-primer.compiler.definition-first.pptx
+[ 16/100] Treefolk primer                              
+        OK — 20 staged, wrote treefolk-primer.compiler.definition-first.pptx
+[ 17/100] Beasts primer                                
+        OK — 20 staged, wrote beasts-primer.compiler.definition-first.pptx
+[ 18/100] Pirates primer                               
+        OK — 20 staged, wrote pirates-primer.compiler.definition-first.pptx
+[ 19/100] Dinosaurs primer                             
+        OK — 20 staged, wrote dinosaurs-primer.compiler.definition-first.pptx
+[ 20/100] Ninjas primer                                
+        OK — 20 staged, wrote ninjas-primer.compiler.definition-first.pptx
+[ 21/100] Dogs with a keyword                          
+        OK — 20 staged, wrote dogs-with-a-keyword.compiler.argument-driven.pptx
+[ 22/100] Cats with deathtouch                         
+        OK — 2 staged, wrote cats-with-deathtouch.compiler.argument-driven.pptx
+[ 23/100] Cats with lifelink                           
+        OK — 16 staged, wrote cats-with-lifelink.compiler.argument-driven.pptx
+[ 24/100] Knights with first strike                    
+        OK — 20 staged, wrote knights-with-first-strike.compiler.argument-driven.pptx
+[ 25/100] Knights with vigilance                       
+        OK — 20 staged, wrote knights-with-vigilance.compiler.argument-driven.pptx
+[ 26/100] Angels with vigilance                        
+        OK — 20 staged, wrote angels-with-vigilance.compiler.argument-driven.pptx
+[ 27/100] Angels with lifelink                         
+        OK — 20 staged, wrote angels-with-lifelink.compiler.argument-driven.pptx
+[ 28/100] Vampires with lifelink                       
+        OK — 20 staged, wrote vampires-with-lifelink.compiler.argument-driven.pptx
+[ 29/100] Vampires with flying                         
+        OK — 20 staged, wrote vampires-with-flying.compiler.argument-driven.pptx
+[ 30/100] Dragons with haste                           
+        OK — 20 staged, wrote dragons-with-haste.compiler.argument-driven.pptx
+[ 31/100] Dragons with trample                         
+        OK — 20 staged, wrote dragons-with-trample.compiler.argument-driven.pptx
+[ 32/100] Demons with flying                           
+        OK — 20 staged, wrote demons-with-flying.compiler.argument-driven.pptx
+[ 33/100] Goblins with haste                           
+        OK — 20 staged, wrote goblins-with-haste.compiler.argument-driven.pptx
+[ 34/100] Goblins with menace                          
+        OK — 20 staged, wrote goblins-with-menace.compiler.argument-driven.pptx
+[ 35/100] Elves with reach                             
+        OK — 20 staged, wrote elves-with-reach.compiler.argument-driven.pptx
+[ 36/100] Faeries with flash                           
+        OK — 20 staged, wrote faeries-with-flash.compiler.argument-driven.pptx
+[ 37/100] Spirits with flying                          
+        OK — 20 staged, wrote spirits-with-flying.compiler.argument-driven.pptx
+[ 38/100] Spirits with flash                           
+        OK — 20 staged, wrote spirits-with-flash.compiler.argument-driven.pptx
+[ 39/100] Beasts with trample                          
+        OK — 20 staged, wrote beasts-with-trample.compiler.argument-driven.pptx
+[ 40/100] Pirates with menace                          
+        OK — 13 staged, wrote pirates-with-menace.compiler.argument-driven.pptx
+[ 41/100] Wizards with flash                           
+        OK — 20 staged, wrote wizards-with-flash.compiler.argument-driven.pptx
+[ 42/100] Wizards with prowess                         
+        OK — 17 staged, wrote wizards-with-prowess.compiler.argument-driven.pptx
+[ 43/100] Soldiers with vigilance                      
+        OK — 20 staged, wrote soldiers-with-vigilance.compiler.argument-driven.pptx
+[ 44/100] Soldiers with first strike                   
+        OK — 20 staged, wrote soldiers-with-first-strike.compiler.argument-driven.pptx
+[ 45/100] Merfolk with islandwalk                      
+        OK — 18 staged, wrote merfolk-with-islandwalk.compiler.argument-driven.pptx
+[ 46/100] Zombies with menace                          
+        OK — 20 staged, wrote zombies-with-menace.compiler.argument-driven.pptx
+[ 47/100] Zombies with deathtouch                      
+        OK — 20 staged, wrote zombies-with-deathtouch.compiler.argument-driven.pptx
+[ 48/100] Treefolk with reach                          
+        OK — 13 staged, wrote treefolk-with-reach.compiler.argument-driven.pptx
+[ 49/100] Hydras with trample                          
+        OK — 19 staged, wrote hydras-with-trample.compiler.argument-driven.pptx
+[ 50/100] Sphinxes with flying                         
+        OK — 20 staged, wrote sphinxes-with-flying.compiler.argument-driven.pptx
+[ 51/100] Birds with flying                            
+        OK — 20 staged, wrote birds-with-flying.compiler.argument-driven.pptx
+[ 52/100] Snakes with deathtouch                       
+        OK — 17 staged, wrote snakes-with-deathtouch.compiler.argument-driven.pptx
+[ 53/100] Spiders with reach                           
+        OK — 20 staged, wrote spiders-with-reach.compiler.argument-driven.pptx
+[ 54/100] Rats with menace                             
+        OK — 11 staged, wrote rats-with-menace.compiler.argument-driven.pptx
+[ 55/100] Cats with first strike                       
+        OK — 12 staged, wrote cats-with-first-strike.compiler.argument-driven.pptx
+[ 56/100] Dogs with vigilance                          
+        OK — 10 staged, wrote dogs-with-vigilance.compiler.argument-driven.pptx
+[ 57/100] Dogs with lifelink                           
+        OK — 5 staged, wrote dogs-with-lifelink.compiler.argument-driven.pptx
+[ 58/100] Samurai with bushido                         
+        OK — 20 staged, wrote samurai-with-bushido.compiler.argument-driven.pptx
+[ 59/100] Slivers with keyword sharing                 
+        OK — 20 staged, wrote slivers-with-keyword-sharing.compiler.argument-driven.pptx
+[ 60/100] Eldrazi with annihilator                     
+        OK — 16 staged, wrote eldrazi-with-annihilator.compiler.argument-driven.pptx
+[ 61/100] Dogs that draw cards                         
+        OK — 5 staged, wrote dogs-that-draw-cards.compiler.argument-driven.pptx
+[ 62/100] Cats that gain life                          
+        OK — 5 staged, wrote cats-that-gain-life.compiler.argument-driven.pptx
+[ 63/100] Wizards that draw cards                      
+        OK — 20 staged, wrote wizards-that-draw-cards.compiler.argument-driven.pptx
+[ 64/100] Wizards that mill                            
+        OK — 20 staged, wrote wizards-that-mill.compiler.argument-driven.pptx
+[ 65/100] Goblins that sacrifice                       
+        OK — 20 staged, wrote goblins-that-sacrifice.compiler.argument-driven.pptx
+[ 66/100] Zombies that recur                           
+        OK — 20 staged, wrote zombies-that-recur.compiler.argument-driven.pptx
+[ 67/100] Vampires that drain life                     
+        OK — 20 staged, wrote vampires-that-drain-life.compiler.argument-driven.pptx
+[ 68/100] Elves that ramp                              
+        OK — 20 staged, wrote elves-that-ramp.compiler.argument-driven.pptx
+[ 69/100] Merfolk that mill                            
+        OK — 13 staged, wrote merfolk-that-mill.compiler.argument-driven.pptx
+[ 70/100] Spirits that flicker                         
+        OK — 20 staged, wrote spirits-that-flicker.compiler.argument-driven.pptx
+[ 71/100] Beasts that fight                            
+        OK — 3 staged, wrote beasts-that-fight.compiler.argument-driven.pptx
+[ 72/100] Knights that exile                           
+        OK — 20 staged, wrote knights-that-exile.compiler.argument-driven.pptx
+[ 73/100] Soldiers that make tokens                    
+        OK — 20 staged, wrote soldiers-that-make-tokens.compiler.argument-driven.pptx
+[ 74/100] Angels that gain life                        
+        OK — 20 staged, wrote angels-that-gain-life.compiler.argument-driven.pptx
+[ 75/100] Demons that punish                           
+        OK — 20 staged, wrote demons-that-punish.compiler.argument-driven.pptx
+[ 76/100] Faeries that bounce                          
+        OK — 12 staged, wrote faeries-that-bounce.compiler.argument-driven.pptx
+[ 77/100] Treefolk that pump                           
+        OK — 20 staged, wrote treefolk-that-pump.compiler.argument-driven.pptx
+[ 78/100] Pirates that steal                           
+        OK — 20 staged, wrote pirates-that-steal.compiler.argument-driven.pptx
+[ 79/100] Dinosaurs with enrage                        
+        OK — 20 staged, wrote dinosaurs-with-enrage.compiler.argument-driven.pptx
+[ 80/100] Ninjas with ninjutsu                         
+        OK — 20 staged, wrote ninjas-with-ninjutsu.compiler.argument-driven.pptx
+[ 81/100] Books in Magic                               
+        OK — 20 staged, wrote books-in-magic.compiler.thematic.pptx
+[ 82/100] Doors in Magic                               
+        OK — 20 staged, wrote doors-in-magic.compiler.thematic.pptx
+[ 83/100] Dreams in Magic                              
+        OK — 10 staged, wrote dreams-in-magic.compiler.thematic.pptx
+[ 84/100] Masks in Magic                               
+        OK — 3 staged, wrote masks-in-magic.compiler.thematic.pptx
+[ 85/100] Libraries as places                          
+Traceback (most recent call last):
+  File "C:\Dev\MTGSLIDER\tools\bulk_generate.py", line 82, in main
+    result = _process(spec, fetch_images=not args.no_images)
+  File "C:\Dev\MTGSLIDER\tools\bulk_generate.py", line 123, in _process
+    staged = themes.find_cards_by_query(slug, spec["query"], limit=STAGED_PER_THEME)
+  File "C:\Dev\MTGSLIDER\src\mtgslider\themes.py", line 213, in find_cards_by_query
+    for card in scryfall.search(query):
+                ~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Dev\MTGSLIDER\src\mtgslider\scryfall.py", line 174, in search
+    body = _get(next_url, params=params if next_url == "/cards/search" else None)
+  File "C:\Dev\MTGSLIDER\src\mtgslider\scryfall.py", line 64, in _get
+    resp.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\AppData\Roaming\Python\Python314\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.scryfall.com/cards/search?q=n%3Alibrary+-n%3A%27library+of%27&unique=cards&order=name
+        FAILED — 400 Client Error: Bad Request for url: https://api.scryfall.com/cards/search?q=n%3Alibrary+-n%3A%27library+of%27&unique=cards&order=name
+[ 86/100] Ruins in Magic                               
+Traceback (most recent call last):
+  File "C:\Dev\MTGSLIDER\tools\bulk_generate.py", line 82, in main
+    result = _process(spec, fetch_images=not args.no_images)
+  File "C:\Dev\MTGSLIDER\tools\bulk_generate.py", line 123, in _process
+    staged = themes.find_cards_by_query(slug, spec["query"], limit=STAGED_PER_THEME)
+  File "C:\Dev\MTGSLIDER\src\mtgslider\themes.py", line 213, in find_cards_by_query
+    for card in scryfall.search(query):
+                ~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Dev\MTGSLIDER\src\mtgslider\scryfall.py", line 174, in search
+    body = _get(next_url, params=params if next_url == "/cards/search" else None)
+  File "C:\Dev\MTGSLIDER\src\mtgslider\scryfall.py", line 64, in _get
+    resp.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\PC\AppData\Roaming\Python\Python314\site-packages\requests\models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.scryfall.com/cards/search?q=n%3Aruin+or+n%3Aruins&unique=cards&order=name
+        FAILED — 400 Client Error: Bad Request for url: https://api.scryfall.com/cards/search?q=n%3Aruin+or+n%3Aruins&unique=cards&order=name
+[ 87/100] Sea creatures                                
+        OK — 20 staged, wrote sea-creatures.compiler.thematic.pptx
+[ 88/100] Insects in Magic                             
+        OK — 20 staged, wrote insects-in-magic.compiler.thematic.pptx
+[ 89/100] Bees and wasps                               
+        OK — 20 staged, wrote bees-and-wasps.compiler.thematic.pptx
+[ 90/100] Mushrooms and fungi                          
+        OK — 20 staged, wrote mushrooms-and-fungi.compiler.thematic.pptx
+[ 91/100] Lab and alchemy                              
+        OK — 20 staged, wrote lab-and-alchemy.compiler.thematic.pptx
+[ 92/100] Graveyard engines                            
+        OK — 20 staged, wrote graveyard-engines.compiler.argument-driven.pptx
+[ 93/100] Equipment payoffs                            
+        OK — 20 staged, wrote equipment-payoffs.compiler.argument-driven.pptx
+[ 94/100] Aura payoffs                                 
+        OK — 20 staged, wrote aura-payoffs.compiler.argument-driven.pptx
+[ 95/100] Token producers                              
+        OK — 20 staged, wrote token-producers.compiler.argument-driven.pptx
+[ 96/100] Sacrifice fodder                             
+        OK — 20 staged, wrote sacrifice-fodder.compiler.argument-driven.pptx
+[ 97/100] Mill engines                                 
+        OK — 20 staged, wrote mill-engines.compiler.argument-driven.pptx
+[ 98/100] Hexproof creatures                           
+        OK — 20 staged, wrote hexproof-creatures.compiler.argument-driven.pptx
+[ 99/100] Indestructible creatures                     
+        OK — 20 staged, wrote indestructible-creatures.compiler.argument-driven.pptx
+[100/100] Defenders that swing                         
+        OK — 20 staged, wrote defenders-that-swing.compiler.argument-driven.pptx
+
+done.  ok=93  skipped=5  failed=2
+index: C:\Dev\MTGSLIDER\themes\bulk_index.csv

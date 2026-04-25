@@ -1,0 +1,99 @@
+index,slug,name,backend,style,staged,pptx_path
+0,dogs-primer,Dogs primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\dogs-primer\out\dogs-primer.compiler.definition-first.pptx
+1,cats-primer,Cats primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\cats-primer\out\cats-primer.compiler.definition-first.pptx
+2,wizards-primer,Wizards primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\wizards-primer\out\wizards-primer.compiler.definition-first.pptx
+3,zombies-primer,Zombies primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\zombies-primer\out\zombies-primer.compiler.definition-first.pptx
+4,goblins-primer,Goblins primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\goblins-primer\out\goblins-primer.compiler.definition-first.pptx
+5,elves-primer,Elves primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\elves-primer\out\elves-primer.compiler.definition-first.pptx
+6,merfolk-primer,Merfolk primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\merfolk-primer\out\merfolk-primer.compiler.definition-first.pptx
+7,vampires-primer,Vampires primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\vampires-primer\out\vampires-primer.compiler.definition-first.pptx
+8,dragons-primer,Dragons primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\dragons-primer\out\dragons-primer.compiler.definition-first.pptx
+9,angels-primer,Angels primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\angels-primer\out\angels-primer.compiler.definition-first.pptx
+10,demons-primer,Demons primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\demons-primer\out\demons-primer.compiler.definition-first.pptx
+11,knights-primer,Knights primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\knights-primer\out\knights-primer.compiler.definition-first.pptx
+12,soldiers-primer,Soldiers primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\soldiers-primer\out\soldiers-primer.compiler.definition-first.pptx
+13,faeries-primer,Faeries primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\faeries-primer\out\faeries-primer.compiler.definition-first.pptx
+14,spirits-primer,Spirits primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\spirits-primer\out\spirits-primer.compiler.definition-first.pptx
+15,treefolk-primer,Treefolk primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\treefolk-primer\out\treefolk-primer.compiler.definition-first.pptx
+16,beasts-primer,Beasts primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\beasts-primer\out\beasts-primer.compiler.definition-first.pptx
+17,pirates-primer,Pirates primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\pirates-primer\out\pirates-primer.compiler.definition-first.pptx
+18,dinosaurs-primer,Dinosaurs primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\dinosaurs-primer\out\dinosaurs-primer.compiler.definition-first.pptx
+19,ninjas-primer,Ninjas primer,compiler,teaching,20,C:\Dev\MTGSLIDER\themes\ninjas-primer\out\ninjas-primer.compiler.definition-first.pptx
+20,dogs-with-a-keyword,Dogs with a keyword,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\dogs-with-a-keyword\out\dogs-with-a-keyword.compiler.argument-driven.pptx
+21,cats-with-deathtouch,Cats with deathtouch,compiler,sierkovitz,2,C:\Dev\MTGSLIDER\themes\cats-with-deathtouch\out\cats-with-deathtouch.compiler.argument-driven.pptx
+22,cats-with-lifelink,Cats with lifelink,compiler,sierkovitz,16,C:\Dev\MTGSLIDER\themes\cats-with-lifelink\out\cats-with-lifelink.compiler.argument-driven.pptx
+23,knights-with-first-strike,Knights with first strike,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\knights-with-first-strike\out\knights-with-first-strike.compiler.argument-driven.pptx
+24,knights-with-vigilance,Knights with vigilance,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\knights-with-vigilance\out\knights-with-vigilance.compiler.argument-driven.pptx
+25,angels-with-vigilance,Angels with vigilance,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\angels-with-vigilance\out\angels-with-vigilance.compiler.argument-driven.pptx
+26,angels-with-lifelink,Angels with lifelink,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\angels-with-lifelink\out\angels-with-lifelink.compiler.argument-driven.pptx
+27,vampires-with-lifelink,Vampires with lifelink,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\vampires-with-lifelink\out\vampires-with-lifelink.compiler.argument-driven.pptx
+28,vampires-with-flying,Vampires with flying,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\vampires-with-flying\out\vampires-with-flying.compiler.argument-driven.pptx
+29,dragons-with-haste,Dragons with haste,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\dragons-with-haste\out\dragons-with-haste.compiler.argument-driven.pptx
+30,dragons-with-trample,Dragons with trample,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\dragons-with-trample\out\dragons-with-trample.compiler.argument-driven.pptx
+31,demons-with-flying,Demons with flying,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\demons-with-flying\out\demons-with-flying.compiler.argument-driven.pptx
+32,goblins-with-haste,Goblins with haste,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\goblins-with-haste\out\goblins-with-haste.compiler.argument-driven.pptx
+33,goblins-with-menace,Goblins with menace,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\goblins-with-menace\out\goblins-with-menace.compiler.argument-driven.pptx
+34,elves-with-reach,Elves with reach,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\elves-with-reach\out\elves-with-reach.compiler.argument-driven.pptx
+35,faeries-with-flash,Faeries with flash,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\faeries-with-flash\out\faeries-with-flash.compiler.argument-driven.pptx
+36,spirits-with-flying,Spirits with flying,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\spirits-with-flying\out\spirits-with-flying.compiler.argument-driven.pptx
+37,spirits-with-flash,Spirits with flash,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\spirits-with-flash\out\spirits-with-flash.compiler.argument-driven.pptx
+38,beasts-with-trample,Beasts with trample,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\beasts-with-trample\out\beasts-with-trample.compiler.argument-driven.pptx
+39,pirates-with-menace,Pirates with menace,compiler,sierkovitz,13,C:\Dev\MTGSLIDER\themes\pirates-with-menace\out\pirates-with-menace.compiler.argument-driven.pptx
+40,wizards-with-flash,Wizards with flash,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\wizards-with-flash\out\wizards-with-flash.compiler.argument-driven.pptx
+41,wizards-with-prowess,Wizards with prowess,compiler,sierkovitz,17,C:\Dev\MTGSLIDER\themes\wizards-with-prowess\out\wizards-with-prowess.compiler.argument-driven.pptx
+42,soldiers-with-vigilance,Soldiers with vigilance,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\soldiers-with-vigilance\out\soldiers-with-vigilance.compiler.argument-driven.pptx
+43,soldiers-with-first-strike,Soldiers with first strike,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\soldiers-with-first-strike\out\soldiers-with-first-strike.compiler.argument-driven.pptx
+44,merfolk-with-islandwalk,Merfolk with islandwalk,compiler,sierkovitz,18,C:\Dev\MTGSLIDER\themes\merfolk-with-islandwalk\out\merfolk-with-islandwalk.compiler.argument-driven.pptx
+45,zombies-with-menace,Zombies with menace,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\zombies-with-menace\out\zombies-with-menace.compiler.argument-driven.pptx
+46,zombies-with-deathtouch,Zombies with deathtouch,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\zombies-with-deathtouch\out\zombies-with-deathtouch.compiler.argument-driven.pptx
+47,treefolk-with-reach,Treefolk with reach,compiler,sierkovitz,13,C:\Dev\MTGSLIDER\themes\treefolk-with-reach\out\treefolk-with-reach.compiler.argument-driven.pptx
+48,hydras-with-trample,Hydras with trample,compiler,sierkovitz,19,C:\Dev\MTGSLIDER\themes\hydras-with-trample\out\hydras-with-trample.compiler.argument-driven.pptx
+49,sphinxes-with-flying,Sphinxes with flying,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\sphinxes-with-flying\out\sphinxes-with-flying.compiler.argument-driven.pptx
+50,birds-with-flying,Birds with flying,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\birds-with-flying\out\birds-with-flying.compiler.argument-driven.pptx
+51,snakes-with-deathtouch,Snakes with deathtouch,compiler,sierkovitz,17,C:\Dev\MTGSLIDER\themes\snakes-with-deathtouch\out\snakes-with-deathtouch.compiler.argument-driven.pptx
+52,spiders-with-reach,Spiders with reach,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\spiders-with-reach\out\spiders-with-reach.compiler.argument-driven.pptx
+53,rats-with-menace,Rats with menace,compiler,sierkovitz,11,C:\Dev\MTGSLIDER\themes\rats-with-menace\out\rats-with-menace.compiler.argument-driven.pptx
+54,cats-with-first-strike,Cats with first strike,compiler,sierkovitz,12,C:\Dev\MTGSLIDER\themes\cats-with-first-strike\out\cats-with-first-strike.compiler.argument-driven.pptx
+55,dogs-with-vigilance,Dogs with vigilance,compiler,sierkovitz,10,C:\Dev\MTGSLIDER\themes\dogs-with-vigilance\out\dogs-with-vigilance.compiler.argument-driven.pptx
+56,dogs-with-lifelink,Dogs with lifelink,compiler,sierkovitz,5,C:\Dev\MTGSLIDER\themes\dogs-with-lifelink\out\dogs-with-lifelink.compiler.argument-driven.pptx
+57,samurai-with-bushido,Samurai with bushido,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\samurai-with-bushido\out\samurai-with-bushido.compiler.argument-driven.pptx
+58,slivers-with-keyword-sharing,Slivers with keyword sharing,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\slivers-with-keyword-sharing\out\slivers-with-keyword-sharing.compiler.argument-driven.pptx
+59,eldrazi-with-annihilator,Eldrazi with annihilator,compiler,sierkovitz,16,C:\Dev\MTGSLIDER\themes\eldrazi-with-annihilator\out\eldrazi-with-annihilator.compiler.argument-driven.pptx
+60,dogs-that-draw-cards,Dogs that draw cards,compiler,sierkovitz,5,C:\Dev\MTGSLIDER\themes\dogs-that-draw-cards\out\dogs-that-draw-cards.compiler.argument-driven.pptx
+61,cats-that-gain-life,Cats that gain life,compiler,sierkovitz,5,C:\Dev\MTGSLIDER\themes\cats-that-gain-life\out\cats-that-gain-life.compiler.argument-driven.pptx
+62,wizards-that-draw-cards,Wizards that draw cards,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\wizards-that-draw-cards\out\wizards-that-draw-cards.compiler.argument-driven.pptx
+63,wizards-that-mill,Wizards that mill,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\wizards-that-mill\out\wizards-that-mill.compiler.argument-driven.pptx
+64,goblins-that-sacrifice,Goblins that sacrifice,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\goblins-that-sacrifice\out\goblins-that-sacrifice.compiler.argument-driven.pptx
+65,zombies-that-recur,Zombies that recur,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\zombies-that-recur\out\zombies-that-recur.compiler.argument-driven.pptx
+66,vampires-that-drain-life,Vampires that drain life,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\vampires-that-drain-life\out\vampires-that-drain-life.compiler.argument-driven.pptx
+67,elves-that-ramp,Elves that ramp,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\elves-that-ramp\out\elves-that-ramp.compiler.argument-driven.pptx
+68,merfolk-that-mill,Merfolk that mill,compiler,sierkovitz,13,C:\Dev\MTGSLIDER\themes\merfolk-that-mill\out\merfolk-that-mill.compiler.argument-driven.pptx
+69,spirits-that-flicker,Spirits that flicker,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\spirits-that-flicker\out\spirits-that-flicker.compiler.argument-driven.pptx
+70,beasts-that-fight,Beasts that fight,compiler,sierkovitz,3,C:\Dev\MTGSLIDER\themes\beasts-that-fight\out\beasts-that-fight.compiler.argument-driven.pptx
+71,knights-that-exile,Knights that exile,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\knights-that-exile\out\knights-that-exile.compiler.argument-driven.pptx
+72,soldiers-that-make-tokens,Soldiers that make tokens,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\soldiers-that-make-tokens\out\soldiers-that-make-tokens.compiler.argument-driven.pptx
+73,angels-that-gain-life,Angels that gain life,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\angels-that-gain-life\out\angels-that-gain-life.compiler.argument-driven.pptx
+74,demons-that-punish,Demons that punish,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\demons-that-punish\out\demons-that-punish.compiler.argument-driven.pptx
+75,faeries-that-bounce,Faeries that bounce,compiler,sierkovitz,12,C:\Dev\MTGSLIDER\themes\faeries-that-bounce\out\faeries-that-bounce.compiler.argument-driven.pptx
+76,treefolk-that-pump,Treefolk that pump,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\treefolk-that-pump\out\treefolk-that-pump.compiler.argument-driven.pptx
+77,pirates-that-steal,Pirates that steal,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\pirates-that-steal\out\pirates-that-steal.compiler.argument-driven.pptx
+78,dinosaurs-with-enrage,Dinosaurs with enrage,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\dinosaurs-with-enrage\out\dinosaurs-with-enrage.compiler.argument-driven.pptx
+79,ninjas-with-ninjutsu,Ninjas with ninjutsu,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\ninjas-with-ninjutsu\out\ninjas-with-ninjutsu.compiler.argument-driven.pptx
+80,books-in-magic,Books in Magic,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\books-in-magic\out\books-in-magic.compiler.thematic.pptx
+81,doors-in-magic,Doors in Magic,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\doors-in-magic\out\doors-in-magic.compiler.thematic.pptx
+82,dreams-in-magic,Dreams in Magic,compiler,rhystic,10,C:\Dev\MTGSLIDER\themes\dreams-in-magic\out\dreams-in-magic.compiler.thematic.pptx
+83,masks-in-magic,Masks in Magic,compiler,rhystic,3,C:\Dev\MTGSLIDER\themes\masks-in-magic\out\masks-in-magic.compiler.thematic.pptx
+86,sea-creatures,Sea creatures,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\sea-creatures\out\sea-creatures.compiler.thematic.pptx
+87,insects-in-magic,Insects in Magic,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\insects-in-magic\out\insects-in-magic.compiler.thematic.pptx
+88,bees-and-wasps,Bees and wasps,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\bees-and-wasps\out\bees-and-wasps.compiler.thematic.pptx
+89,mushrooms-and-fungi,Mushrooms and fungi,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\mushrooms-and-fungi\out\mushrooms-and-fungi.compiler.thematic.pptx
+90,lab-and-alchemy,Lab and alchemy,compiler,rhystic,20,C:\Dev\MTGSLIDER\themes\lab-and-alchemy\out\lab-and-alchemy.compiler.thematic.pptx
+91,graveyard-engines,Graveyard engines,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\graveyard-engines\out\graveyard-engines.compiler.argument-driven.pptx
+92,equipment-payoffs,Equipment payoffs,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\equipment-payoffs\out\equipment-payoffs.compiler.argument-driven.pptx
+93,aura-payoffs,Aura payoffs,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\aura-payoffs\out\aura-payoffs.compiler.argument-driven.pptx
+94,token-producers,Token producers,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\token-producers\out\token-producers.compiler.argument-driven.pptx
+95,sacrifice-fodder,Sacrifice fodder,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\sacrifice-fodder\out\sacrifice-fodder.compiler.argument-driven.pptx
+96,mill-engines,Mill engines,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\mill-engines\out\mill-engines.compiler.argument-driven.pptx
+97,hexproof-creatures,Hexproof creatures,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\hexproof-creatures\out\hexproof-creatures.compiler.argument-driven.pptx
+98,indestructible-creatures,Indestructible creatures,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\indestructible-creatures\out\indestructible-creatures.compiler.argument-driven.pptx
+99,defenders-that-swing,Defenders that swing,compiler,sierkovitz,20,C:\Dev\MTGSLIDER\themes\defenders-that-swing\out\defenders-that-swing.compiler.argument-driven.pptx
