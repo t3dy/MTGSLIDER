@@ -39,3 +39,5 @@ Files are numbered to preserve order. Future queries get a new file in the same 
 - [Q24 — Attila temperament fact (later retracted)](Q24_attila_temperament_retracted.md)
 - [Q25 — Ignore Q24](Q25_ignore_attila.md)
 - [Q26 — Browseable static website for docs / code / slideshows](Q26_browseable_website.md)
+- [Q27 — `;et` (incomplete input)](Q27_incomplete_input.md)
+- [Q28 — Deploy the website to GitHub Pages](Q28_deploy_pages.md)
